@@ -1,0 +1,12 @@
+[submodule "lib/SimpleBLE"]
+	path = lib/SimpleBLE
+	url = https://github.com/OpenBluetoothToolbox/SimpleBLE
+[submodule "lib/linenoise"]
+	path = lib/linenoise
+	url = https://github.com/antirez/linenoise
+[submodule "lib/json"]
+	path = lib/json
+	url = https://github.com/nlohmann/json
+[submodule "lib/tomlplusplus"]
+	path = lib/tomlplusplus
+	url = https://github.com/marzer/tomlplusplus/
