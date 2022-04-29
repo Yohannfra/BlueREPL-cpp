@@ -1,0 +1,5 @@
+DEVICE_NAME = "my_device"
+
+DEVICE_ADDRESS = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+
+[[services]]

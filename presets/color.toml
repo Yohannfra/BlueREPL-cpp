@@ -1,0 +1,25 @@
+DEVICE_NAME = "my_device"
+
+DEVICE_ADDRESS = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+
+[[services.color]]
+NAME = "color"
+UUID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+
+[[services.color.red]]
+NAME = "red"
+UUID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+PERMS = ["write", "read"]
+size = 1
+
+[[services.color.green]]
+NAME = "green"
+UUID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+PERMS = ["write", "read"]
+size = 1
+
+[[services.color.blue]]
+NAME = "blue"
+UUID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+PERMS = ["write", "read"]
+size = 1

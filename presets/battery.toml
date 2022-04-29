@@ -1,0 +1,12 @@
+DEVICE_NAME = "my_device"
+
+DEVICE_ADDRESS = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+
+[[services.battery]]
+NAME = "battery"
+UUID = "0x180"
+
+[[services.battery.characteristics.level]]
+NAME = "level"
+UUID = "0x2A19"
+PERMS = ["read"]

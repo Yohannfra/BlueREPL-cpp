@@ -1,0 +1,17 @@
+DEVICE_NAME = "my_device"
+
+DEVICE_ADDRESS = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+
+[[services.hrs]]
+NAME = "Heart rate services"
+UUID = "0x180D"
+
+[[services.hrs.characteristics.mesurement]]
+NAME = "Heart rate mesurement"
+UUID = "0x2A37"
+PERMS = ["notify"]
+
+[[services.hrs.characteristics.location]]
+NAME = "Body sensor location"
+UUID = "0x2A38"
+PERMS = ["read"]
