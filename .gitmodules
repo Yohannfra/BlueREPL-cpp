@@ -10,3 +10,6 @@
 [submodule "lib/tomlplusplus"]
 	path = lib/tomlplusplus
 	url = https://github.com/marzer/tomlplusplus/
+[submodule "lib/libserialport"]
+	path = lib/libserialport
+	url = https://github.com/sigrokproject/libserialport
