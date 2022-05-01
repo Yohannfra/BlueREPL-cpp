@@ -1,4 +1,4 @@
-#include "BleController.hpp"
+#include "SimpleBleController.hpp"
 
 #include "Repl.hpp"
 
@@ -7,12 +7,12 @@
 #include <sstream>
 #include <stdexcept>
 
-BleController::BleController()
+SimpleBLEController::SimpleBLEController()
 {
     this->selectAdapter();
 }
 
-void BleController::selectAdapter()
+void SimpleBLEController::selectAdapter()
 {
     auto adapter_list = SimpleBLE::Adapter::get_adapters();
 
@@ -49,7 +49,7 @@ void BleController::selectAdapter()
     }
 }
 
-std::string BleController::byte_array_to_string(SimpleBLE::ByteArray &bytes) const
+std::string SimpleBLEController::byte_array_to_string(SimpleBLE::ByteArray &bytes) const
 {
     std::ostringstream oss;
     for (auto byte : bytes) {
@@ -58,7 +58,7 @@ std::string BleController::byte_array_to_string(SimpleBLE::ByteArray &bytes) con
     return oss.str();
 }
 
-void BleController::printScannedPeripheral() const
+void SimpleBLEController::printScannedPeripheral() const
 {
     std::size_t index = 0;
     for (const auto &per : _scannedPeripherals) {
@@ -75,7 +75,7 @@ void BleController::printScannedPeripheral() const
     }
 }
 
-int BleController::scan(std::uint32_t scan_time_second, bool print_results)
+int SimpleBLEController::scan(std::uint32_t scan_time_second, bool print_results)
 {
     std::cout << "Scanning for " << scan_time_second << " seconds..." << std::endl;
     _adapter.scan_for(scan_time_second * 1000);
@@ -93,7 +93,7 @@ int BleController::scan(std::uint32_t scan_time_second, bool print_results)
     return EXIT_SUCCESS;
 }
 
-int BleController::internal_connect()
+int SimpleBLEController::internal_connect()
 {
     std::cout << "Connecting to " << _peripheral.identifier() << " [" << _peripheral.address() << "]" << std::endl;
     _peripheral.connect();
@@ -107,7 +107,7 @@ int BleController::internal_connect()
     return EXIT_FAILURE;
 }
 
-int BleController::connectByIndex(std::size_t index)
+int SimpleBLEController::connectByIndex(std::size_t index)
 {
     if (_scannedPeripherals.empty()) {
         std::cerr << "No device to connect to, please scan first" << std::endl;
@@ -123,7 +123,7 @@ int BleController::connectByIndex(std::size_t index)
     return this->internal_connect();
 }
 
-int BleController::connectByAddress(const std::string &device_address)
+int SimpleBLEController::connectByAddress(const std::string &device_address)
 {
     if (_scannedPeripherals.empty()) {
         if (this->scan(5, false) == EXIT_FAILURE) {
@@ -141,7 +141,7 @@ int BleController::connectByAddress(const std::string &device_address)
     return EXIT_FAILURE;
 }
 
-int BleController::connectByName(const std::string &device_name)
+int SimpleBLEController::connectByName(const std::string &device_name)
 {
     if (_scannedPeripherals.empty()) {
         if (this->scan(5, false) == EXIT_FAILURE) {
@@ -159,7 +159,7 @@ int BleController::connectByName(const std::string &device_name)
     return EXIT_FAILURE;
 }
 
-int BleController::disconnect()
+int SimpleBLEController::disconnect()
 {
     if (!this->isConnected()) {
         std::cerr << "No device connected" << std::endl;
@@ -175,7 +175,7 @@ int BleController::disconnect()
     return EXIT_SUCCESS;
 }
 
-int BleController::print_peripheral_services() const
+int SimpleBLEController::print_peripheral_services() const
 {
     if (!this->isConnected()) {
         std::cerr << "No device connected" << std::endl;
@@ -195,12 +195,12 @@ int BleController::print_peripheral_services() const
     return EXIT_SUCCESS;
 }
 
-bool BleController::isConnected() const
+bool SimpleBLEController::isConnected() const
 {
     return (_peripheral.initialized() && _peripheral.is_connected());
 }
 
-int BleController::print_peripheral_infos() const
+int SimpleBLEController::print_peripheral_infos() const
 {
     if (!this->isConnected()) {
         std::cerr << "No device connected" << std::endl;
@@ -215,7 +215,23 @@ int BleController::print_peripheral_infos() const
     return EXIT_SUCCESS;
 }
 
-BleController::~BleController()
+std::vector<std::uint8_t> SimpleBLEController::read(std::string const &service, std::string const &characteristic)
+{
+    std::vector<std::uint8_t> read_bytes;
+
+    if (!this->isConnected()) {
+        std::cerr << "No device connected" << std::endl;
+        return read_bytes;
+    }
+
+    auto read_as_str = _peripheral.read(service, characteristic);
+    for (auto &c: read_as_str) {
+        read_bytes.push_back(c);
+    }
+    return read_bytes;
+}
+
+SimpleBLEController::~SimpleBLEController()
 {
     if (this->isConnected()) {
         this->disconnect();

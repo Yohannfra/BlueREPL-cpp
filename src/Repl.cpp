@@ -86,6 +86,10 @@ int Repl::run()
             args.push_back(arg);
         }
 
+        if (cmd == "quit" || cmd == "exit") {
+            break;
+        }
+
         if (cmd == "help") {
             Command::Help::run(args);
         } else if (cmd == "scan") {
@@ -98,6 +102,7 @@ int Repl::run()
         } else if (cmd == "info") {
             Command::Info::run(_bt, args);
         } else if (cmd == "read") {
+            Command::Read::run(_bt, args);
         } else if (cmd == "write") {
         } else if (cmd == "subscribe") {
         } else if (cmd == "unsubscribe") {

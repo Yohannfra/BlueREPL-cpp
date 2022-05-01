@@ -1,35 +1,25 @@
 #ifndef BLECONTROLLER_HPP
 #define BLECONTROLLER_HPP
 
-#include "simpleble/SimpleBLE.h"
+#include <string>
+#include <vector>
+
+using BluetoothUUID = std::string;
+using BluetoothAddress = std::string;
+using ByteArray = std::string;
 
 class BleController {
 public:
-    BleController();
-    ~BleController();
-
-    int scan(std::uint32_t scan_time_second = 5, bool print_results = true);
-
-    void printScannedPeripheral() const;
-    int connectToScannedPeripheral(std::size_t index);
-    int connectByIndex(std::size_t index);
-    int connectByAddress(const std::string &device_address);
-    int connectByName(const std::string &device_name);
-    int disconnect();
-
-    int print_peripheral_services() const;
-    int print_peripheral_infos() const;
-
-    bool isConnected() const;
-
-private:
-    void selectAdapter();
-    std::string byte_array_to_string(SimpleBLE::ByteArray &bytes) const;
-    int internal_connect();
-
-    SimpleBLE::Adapter _adapter;
-    std::vector<SimpleBLE::Peripheral> _scannedPeripherals;
-    SimpleBLE::Peripheral _peripheral;
+    virtual int scan(std::uint32_t scan_time_second = 5, bool print_results = true) = 0;
+    virtual void printScannedPeripheral() const = 0;
+    virtual int connectByIndex(std::size_t index) = 0;
+    virtual int connectByAddress(const std::string &device_address) = 0;
+    virtual int connectByName(const std::string &device_name) = 0;
+    virtual int disconnect() = 0;
+    virtual int print_peripheral_services() const = 0;
+    virtual int print_peripheral_infos() const = 0;
+    virtual bool isConnected() const = 0;
+    virtual std::vector<std::uint8_t> read(BluetoothUUID const &service, BluetoothUUID const &characteristic) = 0;
 };
 
 #endif

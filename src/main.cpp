@@ -2,6 +2,7 @@
 #include "Repl.hpp"
 #include "linenoise.h"
 #include "nlohmann/json.hpp"
+#include "Controllers/SimpleBLE/SimpleBleController.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -43,8 +44,8 @@ int main(int argc, const char **argv)
     }
 
     try {
-        BleController bt;
-        Repl repl(bt);
+        BleController *bt = new SimpleBLEController();
+        Repl repl(*bt);
         repl.run();
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;

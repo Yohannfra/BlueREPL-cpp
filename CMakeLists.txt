@@ -15,7 +15,8 @@ add_executable(blerepl
     src/Repl.cpp
     src/Repl.hpp
 
-    src/BleController.cpp
+    src/Controllers/SimpleBLE/SimpleBleController.cpp
+    src/Controllers/SimpleBLE/SimpleBleController.hpp
     src/BleController.hpp
 
     src/commands/connect.hpp

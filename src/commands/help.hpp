@@ -4,6 +4,7 @@
 #include "connect.hpp"
 #include "disconnect.hpp"
 #include "info.hpp"
+#include "read.hpp"
 #include "scan.hpp"
 
 namespace Command {
@@ -47,6 +48,7 @@ namespace Command {
                     } else if (arg == "info") {
                         Info::print_help();
                     } else if (arg == "read") {
+                        Read::print_help();
                     } else if (arg == "write") {
                     } else if (arg == "subscribe") {
                     } else if (arg == "unsubscribe") {
