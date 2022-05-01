@@ -1,19 +1,16 @@
 BIN_NAME=blerepl
 
 build:
-	@cd build && \
-			make && \
-			cp ./compile_commands.json .. && \
-			cp ./$(BIN_NAME) ..
+	@cmake --build build
+	@cp ./build/compile_commands.json .
+	@cp ./build/$(BIN_NAME) .
 
 gen:
-	@mkdir -p build && \
-			cd build && \
-			cmake ..
+	@cmake -S . -B build
 
 clean:
 	@$(RM) -r build/
 
-re: clean all
+re: clean gen build
 
-.PHONY: all clean re build
+.PHONY: build gen clean re
