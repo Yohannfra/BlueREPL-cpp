@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(blerepl CXX C)
+project(bluerepl CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS on)
 
-add_executable(blerepl
+add_executable(bluerepl
     src/main.cpp
 
     src/utils.cpp
@@ -32,7 +32,7 @@ add_executable(blerepl
     src/commands/write.hpp
     )
 
-target_include_directories(blerepl PUBLIC
+target_include_directories(bluerepl PUBLIC
     src
     lib/tomlplusplus/include
     )
@@ -48,4 +48,4 @@ target_include_directories(linenoise PUBLIC lib/linenoise-mob)
 add_subdirectory(lib/SimpleBLE)
 include_directories(${SIMPLEBLE_INCLUDES})
 
-target_link_libraries(blerepl simpleble-static linenoise fmt)
+target_link_libraries(bluerepl simpleble-static linenoise fmt)

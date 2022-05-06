@@ -1,4 +1,4 @@
-BIN_NAME=blerepl
+BIN_NAME=bluerepl
 
 build:
 	@cmake --build build
