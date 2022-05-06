@@ -13,4 +13,7 @@ clean:
 
 re: clean gen build
 
-.PHONY: build gen clean re
+lint:
+	cppcheck --quiet --enable=warning,style,performance,portability src
+
+.PHONY: build gen clean re lint
