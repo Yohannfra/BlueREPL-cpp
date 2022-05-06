@@ -1,6 +1,6 @@
 #include "BleController.hpp"
 #include "Controllers/SimpleBLE/SimpleBleController.hpp"
-#include "Repl.hpp"
+#include "Repl/Repl.hpp"
 #include "linenoise.h"
 
 #include <filesystem>

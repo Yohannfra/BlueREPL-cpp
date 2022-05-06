@@ -1,6 +1,6 @@
 #include "SimpleBleController.hpp"
 
-#include "Repl.hpp"
+#include "Repl/Repl.hpp"
 
 #include <iomanip>
 #include <iostream>

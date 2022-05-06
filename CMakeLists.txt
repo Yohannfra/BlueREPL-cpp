@@ -12,8 +12,8 @@ add_executable(blerepl
     src/utils.cpp
     src/utils.hpp
 
-    src/Repl.cpp
-    src/Repl.hpp
+    src/Repl/Repl.cpp
+    src/Repl/Repl.hpp
     src/Repl/AliasManager.cpp
     src/Repl/AliasManager.hpp
 
@@ -21,9 +21,15 @@ add_executable(blerepl
     src/Controllers/SimpleBLE/SimpleBleController.hpp
     src/BleController.hpp
 
+    src/commands/ArgumentsParser.hpp
+    src/commands/ICommand.hpp
+    src/commands/clear.hpp
     src/commands/connect.hpp
-    src/commands/help.hpp
+    src/commands/disconnect.hpp
+    src/commands/info.hpp
+    src/commands/read.hpp
     src/commands/scan.hpp
+    src/commands/write.hpp
     )
 
 target_include_directories(blerepl PUBLIC
