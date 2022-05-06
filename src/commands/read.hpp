@@ -2,41 +2,60 @@
 #define READ_HPP
 
 #include "BleController.hpp"
-#include "utils.hpp"
+#include "ICommand.hpp"
 
 #include <iostream>
 #include <string>
 #include <vector>
 
 namespace Command {
-    class Read {
+    class Read : public ICommand {
     public:
-        static void print_help()
+        Read()
         {
-            std::cout << "help" << '\n';
-            std::cout << "\nDescription:\n\tread a characteristic value" << std::endl;
-            std::cout << "\nParameters:\n\tdevice_identifier: identifier of the device (found in "
-                         "scan command)\n";
-            std::cout << "\tThe identifier can be of three different type:\n";
-            std::cout << "\t- integer -> connection by index of the device in the scan list" << std::endl;
-            std::cout << "\t- a string mac address (format XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX)  -> connection "
-                         "by using the mac address of the device\n";
-            std::cout << "\t- any other string -> connection by using name of the device" << std::endl;
+            _name = "read";
+            _hint = "Read a characteristic value and print it";
+            _usage = "service_uuid characteristic_uuid [-a] [-x] [-d]";
+
+            _args.add(
+                {"service_uuid", "\tuuid of the service in which the characteristic is", true, false, false});
+            _args.add({"characteristic_uuid", "uuid of the characteristic to read", true, false, false});
+            _args.add({"-a", "\t\tprint as ascii", false, true, true});
+            _args.add({"-b", "\t\tprint as binary", false, true, true});
+            _args.add({"-d", "\t\tprint as decimal", false, true, true});
+            _args.add({"-x", "\t\tprint as hexadecimal (default)", false, true, true});
         }
 
-        static int run(BleController &bt, std::vector<std::string> &args)
+        int run(std::vector<std::string> &args, BleController &bt) override
         {
-            if (args.size() != 2) {
-                std::cerr << "Invalid usage, see 'help connect'" << std::endl;
+            auto type = BleDataType::HEXADECIMAL;
+
+            for (auto &o : _args.filterOptions(args)) {
+                if (o == "-a") {
+                    type = BleDataType::ASCII;
+                } else if (o == "-b") {
+                    type = BleDataType::BINARY;
+                } else if (o == "-d") {
+                    type = BleDataType::DECIMAL;
+                } else if (o == "-x") {
+                    type = BleDataType::HEXADECIMAL;
+                } else {
+                    std::cerr << "Unknown options: " << o << std::endl;
+                    return EXIT_FAILURE;
+                }
+            }
+
+            std::vector<std::string> values = _args.filterValues(args);
+
+            if (values.size() != _args.getNumberOfRequiredArgs()) {
+                std::cerr << "Invalid usage, see 'help read'" << std::endl;
                 return EXIT_FAILURE;
             }
 
-            BluetoothUUID service = args.at(0);
-            BluetoothUUID characteristic = args.at(1);
-            auto vals = bt.read(service, characteristic);
-            for (size_t i = 0; i < vals.size(); i++) {
-                std::cout << (int)vals.at(i) << std::endl;
-            }
+            BluetoothUUID service = values.at(0);
+            BluetoothUUID characteristic = values.at(1);
+            std::string vals = bt.read(service, characteristic);
+            Utils::printBleValue(vals, type);
 
             return EXIT_SUCCESS;
         }

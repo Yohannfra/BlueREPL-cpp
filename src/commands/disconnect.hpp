@@ -2,6 +2,7 @@
 #define DISCONNECT_HPP
 
 #include "BleController.hpp"
+#include "ICommand.hpp"
 #include "utils.hpp"
 
 #include <iostream>
@@ -9,15 +10,15 @@
 #include <vector>
 
 namespace Command {
-    class Disconnect {
+    class Disconnect : public ICommand {
     public:
-        static void print_help()
+        Disconnect()
         {
-            std::cout << "help" << '\n';
-            std::cout << "\nDescription:\n\tdisconnect from the ble device" << std::endl;
+            _name = "disconnect";
+            _hint = "disconnect from the ble device";
         }
 
-        static int run(BleController &bt, std::vector<std::string> &args)
+        int run(std::vector<std::string> &args, BleController &bt) override
         {
             if (!args.empty()) {
                 std::cerr << "Invalid usage, see 'help disconnect'" << std::endl;

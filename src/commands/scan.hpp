@@ -2,24 +2,26 @@
 #define SCAN_HPP
 
 #include "BleController.hpp"
+#include "ICommand.hpp"
 
 #include <iostream>
 #include <string>
 #include <vector>
 
 namespace Command {
-    class Scan {
+    class Scan : public ICommand {
     public:
-        static void print_help()
+        Scan()
         {
-            std::cout << "help\n";
-            std::cout << "\nDescription:\n\tscan ble devices arround\n";
-            std::cout << "\nParameters:\n\ttimeout: scan time (in second)" << std::endl;
+            _name = "scan";
+            _hint = "Search for BLE devices around";
+            _usage = "[timeout]";
+            _args.add({"timeout", "scan duration (in seconds), 5 by default", false, false, false});
         }
 
-        static int run(BleController &bt, std::vector<std::string> &args)
+        int run(std::vector<std::string> &args, BleController &bt) override
         {
-            if (args.size() > 1) {
+            if (args.size() > _args.getNumberArgs()) {
                 std::cerr << "Invalid usage, see 'help scan'" << std::endl;
                 return EXIT_FAILURE;
             } else if (args.size() == 1) {
@@ -27,13 +29,14 @@ namespace Command {
                 try {
                     timeout = std::stoi(args.at(0));
                 } catch (std::invalid_argument) {
-                    std::cout << "'" << args.at(0) << "' Not a number" << std::endl;
+                    std::cerr << "'" << args.at(0) << "' Not a number" << std::endl;
+                    return EXIT_FAILURE;
                 }
                 bt.scan(timeout);
             } else {
                 bt.scan();
             }
-            return 0;
+            return EXIT_SUCCESS;
         }
     };
 } // namespace Command

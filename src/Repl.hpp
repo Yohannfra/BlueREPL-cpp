@@ -2,6 +2,8 @@
 #define REPL_HPP
 
 #include "BleController.hpp"
+#include "Repl/AliasManager.hpp"
+#include "commands/ICommand.hpp"
 
 #include <cstddef>
 #include <optional>
@@ -13,16 +15,18 @@ extern "C" {
 
 class Repl {
 public:
-    Repl(BleController &bt);
+    explicit Repl(BleController &bt);
     ~Repl();
     int run();
 
-    static std::optional<std::string> get_line();
+    static std::optional<std::string> get_line(int last_exit_code = EXIT_SUCCESS);
 
 private:
-    void print_help() const;
-
+    int printHelp(std::vector<std::string> &args);
+    int runAliasCommand(const std::vector<std::string> &args);
     BleController &_bt;
+    std::pair<std::string, std::string> _aliases;
+    AliasManager _aliasManager;
 };
 
 #endif
