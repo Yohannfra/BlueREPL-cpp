@@ -14,6 +14,8 @@ add_executable(blerepl
 
     src/Repl.cpp
     src/Repl.hpp
+    src/Repl/AliasManager.cpp
+    src/Repl/AliasManager.hpp
 
     src/Controllers/SimpleBLE/SimpleBleController.cpp
     src/Controllers/SimpleBLE/SimpleBleController.hpp
@@ -31,16 +33,13 @@ target_include_directories(blerepl PUBLIC
 
 # linenoise
 add_library(linenoise STATIC
-        lib/linenoise/linenoise.c
+        lib/linenoise-mob/linenoise.c
     )
 
-target_include_directories(linenoise PUBLIC lib/linenoise)
+target_include_directories(linenoise PUBLIC lib/linenoise-mob)
 
 # simpleBLE
 add_subdirectory(lib/SimpleBLE)
-
-# json
 include_directories(${SIMPLEBLE_INCLUDES})
-add_subdirectory(lib/json)
 
-target_link_libraries(blerepl simpleble-static nlohmann_json linenoise)
+target_link_libraries(blerepl simpleble-static linenoise fmt)

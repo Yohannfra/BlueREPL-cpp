@@ -3,6 +3,9 @@
 
 #include <string>
 
+using BluetoothUUID = std::string;
+using BluetoothAddress = std::string;
+using ByteArray = std::string;
 namespace Utils {
     /**
      * @brief Check if a string has the format of a mac address

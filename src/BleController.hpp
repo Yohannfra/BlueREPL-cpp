@@ -1,12 +1,10 @@
 #ifndef BLECONTROLLER_HPP
 #define BLECONTROLLER_HPP
 
+#include "utils.hpp"
+
 #include <string>
 #include <vector>
-
-using BluetoothUUID = std::string;
-using BluetoothAddress = std::string;
-using ByteArray = std::string;
 
 class BleController {
 public:
@@ -19,7 +17,9 @@ public:
     virtual int print_peripheral_services() const = 0;
     virtual int print_peripheral_infos() const = 0;
     virtual bool isConnected() const = 0;
-    virtual std::vector<std::uint8_t> read(BluetoothUUID const &service, BluetoothUUID const &characteristic) = 0;
+    virtual ByteArray read(BluetoothUUID const &service, BluetoothUUID const &characteristic) = 0;
+    virtual int write(
+        BluetoothUUID const &service, BluetoothUUID const &characteristic, const ByteArray &payload) = 0;
 };
 
 #endif
