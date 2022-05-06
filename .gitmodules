@@ -1,15 +1,12 @@
 [submodule "lib/SimpleBLE"]
 	path = lib/SimpleBLE
 	url = https://github.com/OpenBluetoothToolbox/SimpleBLE
-[submodule "lib/linenoise"]
-	path = lib/linenoise
-	url = https://github.com/antirez/linenoise
-[submodule "lib/json"]
-	path = lib/json
-	url = https://github.com/nlohmann/json
 [submodule "lib/tomlplusplus"]
 	path = lib/tomlplusplus
 	url = https://github.com/marzer/tomlplusplus/
 [submodule "lib/libserialport"]
 	path = lib/libserialport
 	url = https://github.com/sigrokproject/libserialport
+[submodule "lib/linenoise-mob"]
+	path = lib/linenoise-mob
+	url = https://github.com/rain-1/linenoise-mob
