@@ -58,10 +58,10 @@ std::string SimpleBLEController::byte_array_to_string(const SimpleBLE::ByteArray
     return oss.str();
 }
 
-void SimpleBLEController::printScannedPeripheral() const
+void SimpleBLEController::printScannedPeripheral()
 {
     std::size_t index = 0;
-    for (const auto &per : _scannedPeripherals) {
+    for (auto &per : _scannedPeripherals) {
         std::string connectable_string = per.is_connectable() ? "Connectable" : "Non-Connectable";
         std::string peripheral_string = per.identifier() + " [" + per.address() + "]";
 
@@ -132,7 +132,7 @@ int SimpleBLEController::connectByAddress(const std::string &device_address)
     }
 
     auto res = std::find_if(_scannedPeripherals.begin(), _scannedPeripherals.end(),
-        [&](const auto &per) { return per.address() == device_address; });
+        [&](auto &per) { return per.address() == device_address; });
     if (res != _scannedPeripherals.end()) {
         _peripheral = *res.base();
         return this->internal_connect();
@@ -150,7 +150,7 @@ int SimpleBLEController::connectByName(const std::string &device_name)
     }
 
     auto res = std::find_if(_scannedPeripherals.begin(), _scannedPeripherals.end(),
-        [&](const auto &per) { return per.identifier() == device_name; });
+        [&](auto &per) { return per.identifier() == device_name; });
     if (res != _scannedPeripherals.end()) {
         _peripheral = *res.base();
         return this->internal_connect();
@@ -175,7 +175,7 @@ int SimpleBLEController::disconnect()
     return EXIT_SUCCESS;
 }
 
-int SimpleBLEController::print_peripheral_services() const
+int SimpleBLEController::print_peripheral_services()
 {
     if (!this->isConnected()) {
         std::cerr << "No device connected" << std::endl;
@@ -195,12 +195,12 @@ int SimpleBLEController::print_peripheral_services() const
     return EXIT_SUCCESS;
 }
 
-bool SimpleBLEController::isConnected() const
+bool SimpleBLEController::isConnected()
 {
     return (_peripheral.initialized() && _peripheral.is_connected());
 }
 
-int SimpleBLEController::print_peripheral_infos() const
+int SimpleBLEController::print_peripheral_infos()
 {
     if (!this->isConnected()) {
         std::cerr << "No device connected" << std::endl;

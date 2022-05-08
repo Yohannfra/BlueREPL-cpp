@@ -11,16 +11,16 @@ public:
 
     int scan(std::uint32_t scan_time_second = 5, bool print_results = true) final;
 
-    void printScannedPeripheral() const final;
+    void printScannedPeripheral() final;
     int connectByIndex(std::size_t index) final;
     int connectByAddress(const std::string &device_address) final;
     int connectByName(const std::string &device_name) final;
     int disconnect() final;
 
-    int print_peripheral_services() const final;
-    int print_peripheral_infos() const final;
+    int print_peripheral_services() final;
+    int print_peripheral_infos() final;
 
-    bool isConnected() const final;
+    bool isConnected() final;
 
     SimpleBLE::ByteArray read(std::string const &service, std::string const &characteristic) final;
     int write(BluetoothUUID const &service, BluetoothUUID const &characteristic, const ByteArray &payload) final;
