@@ -2,6 +2,7 @@
 #define ARGUMENTSPARSER_HPP
 
 #include <algorithm>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -18,6 +19,10 @@ namespace Command {
     public:
         void add(Argument a)
         {
+            if (a.name.empty()) {
+                throw std::runtime_error("Argument name can't be empty");
+            }
+
             _args.push_back(a);
         }
 
