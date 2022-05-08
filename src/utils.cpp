@@ -34,6 +34,11 @@ bool Utils::isAsciiWord(const std::string &str)
     return true;
 }
 
+void Utils::printAsAscii(const std::string &str)
+{
+    std::cout << str << std::endl;
+}
+
 void Utils::printAsHex(const std::string &str)
 {
     for (auto &c : str) {

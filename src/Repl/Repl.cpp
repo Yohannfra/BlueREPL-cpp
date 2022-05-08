@@ -3,9 +3,12 @@
 #include "commands/clear.hpp"
 #include "commands/connect.hpp"
 #include "commands/disconnect.hpp"
+#include "commands/indicate.hpp"
 #include "commands/info.hpp"
+#include "commands/notify.hpp"
 #include "commands/read.hpp"
 #include "commands/scan.hpp"
+#include "commands/unsubscribe.hpp"
 #include "commands/write.hpp"
 
 #include <functional>
@@ -101,6 +104,9 @@ Repl::Repl(BleController &bt) : _bt(bt)
     _commands.push_back(new Command::Info);
     _commands.push_back(new Command::Read);
     _commands.push_back(new Command::Scan);
+    _commands.push_back(new Command::Notify);
+    _commands.push_back(new Command::Indicate);
+    _commands.push_back(new Command::Unsubscribe);
     _commands.push_back(new Command::Write);
 }
 

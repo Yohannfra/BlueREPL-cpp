@@ -20,6 +20,11 @@ public:
     virtual ByteArray read(BluetoothUUID const &service, BluetoothUUID const &characteristic) = 0;
     virtual int write(
         BluetoothUUID const &service, BluetoothUUID const &characteristic, const ByteArray &payload) = 0;
+    virtual int notify(BluetoothUUID const &service, BluetoothUUID const &characteristic,
+        std::function<void(ByteArray payload)> callback) = 0;
+    virtual int indicate(BluetoothUUID const &service, BluetoothUUID const &characteristic,
+        std::function<void(ByteArray payload)> callback) = 0;
+    virtual int unsubscribe(BluetoothUUID const &service, BluetoothUUID const &characteristic) = 0;
 };
 
 #endif
