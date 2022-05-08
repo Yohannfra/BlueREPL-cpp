@@ -34,7 +34,13 @@ int Repl::printHelp(std::vector<std::string> &args)
     }
 
     for (const auto &c : _commands) {
-        std::cout << c->getName() << "\t" << c->getHint() << std::endl;
+        const int nbTabsNeeded = 3 - static_cast<int>(c->getName().size() / 4);
+
+        std::cout << c->getName();
+        for (int i = 0; i < nbTabsNeeded; i++) {
+            std::cout << '\t';
+        }
+        std::cout << c->getHint() << std::endl;
     }
     return EXIT_SUCCESS;
 }
