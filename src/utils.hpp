@@ -4,6 +4,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include <vector>
 
 #define BOLD(s)  "\x1b[1m" s "\x1b[0m"
 #define RED(s)   "\x1b[0;31m" s "\x1b[0m"
