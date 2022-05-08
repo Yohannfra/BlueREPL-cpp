@@ -2,6 +2,7 @@
 
 #include "Repl/Repl.hpp"
 
+#include <exception>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -238,7 +239,59 @@ int SimpleBLEController::write(
     try {
         _peripheral.write_command(service, characteristic, payload);
         return EXIT_SUCCESS;
-    } catch (...) {
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+}
+
+int SimpleBLEController::notify(BluetoothUUID const &service, BluetoothUUID const &characteristic,
+    std::function<void(ByteArray payload)> callback)
+{
+    if (!this->isConnected()) {
+        std::cerr << "No device connected" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    try {
+        _peripheral.notify(service, characteristic, callback);
+        return EXIT_SUCCESS;
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+}
+
+int SimpleBLEController::indicate(BluetoothUUID const &service, BluetoothUUID const &characteristic,
+    std::function<void(ByteArray payload)> callback)
+{
+    if (!this->isConnected()) {
+        std::cerr << "No device connected" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    try {
+        _peripheral.indicate(service, characteristic, callback);
+        return EXIT_SUCCESS;
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+}
+
+int SimpleBLEController::unsubscribe(BluetoothUUID const &service, BluetoothUUID const &characteristic)
+{
+    if (!this->isConnected()) {
+        std::cerr << "No device connected" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    try {
+        _peripheral.unsubscribe(service, characteristic);
+        std::cout << "Unsubscribed" << std::endl;
+        return EXIT_SUCCESS;
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
     }
 }

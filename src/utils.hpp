@@ -42,6 +42,7 @@ namespace Utils {
      */
     bool isNumber(const std::string &str);
 
+    void printAsAscii(const std::string &str);
     void printAsHex(const std::string &str);
     void printAsDec(const std::string &str);
     void printAsBinary(const std::string &str);

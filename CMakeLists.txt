@@ -37,6 +37,9 @@ add_executable(bluerepl
     src/commands/read.hpp
     src/commands/scan.hpp
     src/commands/write.hpp
+    src/commands/notify.hpp
+    src/commands/indicate.hpp
+    src/commands/unsubscribe.hpp
     )
 
 target_include_directories(bluerepl PUBLIC

@@ -25,6 +25,14 @@ public:
     SimpleBLE::ByteArray read(std::string const &service, std::string const &characteristic) final;
     int write(BluetoothUUID const &service, BluetoothUUID const &characteristic, const ByteArray &payload) final;
 
+    int notify(BluetoothUUID const &service, BluetoothUUID const &characteristic,
+        std::function<void(ByteArray payload)> callback) final;
+
+    int indicate(BluetoothUUID const &service, BluetoothUUID const &characteristic,
+        std::function<void(ByteArray payload)> callback) final;
+
+    int unsubscribe(BluetoothUUID const &service, BluetoothUUID const &characteristic) final;
+
 private:
     void selectAdapter();
     std::string byte_array_to_string(const SimpleBLE::ByteArray &bytes) const;
