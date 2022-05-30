@@ -16,7 +16,7 @@ int AliasManager::printAlias(const std::string &key) const
         return EXIT_FAILURE;
     }
 
-    this->printAlias(key, _aliases.at(key));
+    /* this->printAlias(key, _aliases.at(key)); */
     return EXIT_SUCCESS;
 }
 
@@ -77,4 +77,9 @@ std::vector<std::string> AliasManager::replaceWithAliases(const std::vector<std:
     }
 
     return out;
+}
+
+const std::map<std::string, std::string> &AliasManager::getAliases() const
+{
+    return _aliases;
 }

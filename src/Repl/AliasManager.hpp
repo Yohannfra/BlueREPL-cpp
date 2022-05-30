@@ -20,6 +20,8 @@ public:
 
     std::vector<std::string> replaceWithAliases(const std::vector<std::string> &in);
 
+    const std::map<std::string, std::string> &getAliases() const;
+
 private:
     void printAlias(const std::string &key, const std::string &value) const;
     std::map<std::string, std::string> _aliases;
