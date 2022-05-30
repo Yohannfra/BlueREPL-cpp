@@ -7,3 +7,6 @@
 [submodule "lib/linenoise-mob"]
 	path = lib/linenoise-mob
 	url = https://github.com/rain-1/linenoise-mob
+[submodule "lib/tabulate"]
+	path = lib/tabulate
+	url = https://github.com/p-ranav/tabulate

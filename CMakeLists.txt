@@ -21,12 +21,22 @@ add_executable(bluerepl
 
     src/Repl/Repl.cpp
     src/Repl/Repl.hpp
+    src/Repl/LineReader.cpp
+    src/Repl/LineReader.hpp
     src/Repl/AliasManager.cpp
     src/Repl/AliasManager.hpp
 
     src/Controllers/SimpleBLE/SimpleBleController.cpp
     src/Controllers/SimpleBLE/SimpleBleController.hpp
     src/BleController.hpp
+
+    src/presets/Preset.h
+    src/presets/PresetManager.cpp
+    src/presets/PresetManager.hpp
+    src/presets/PresetParser.cpp
+    src/presets/PresetParser.hpp
+    src/presets/PresetCommand.cpp
+    src/presets/PresetCommand.hpp
 
     src/commands/ArgumentsParser.hpp
     src/commands/ICommand.hpp
@@ -58,4 +68,6 @@ target_include_directories(linenoise PUBLIC lib/linenoise-mob)
 add_subdirectory(lib/SimpleBLE)
 include_directories(${SIMPLEBLE_INCLUDES})
 
-target_link_libraries(bluerepl simpleble-static linenoise fmt)
+add_subdirectory(lib/tabulate)
+
+target_link_libraries(bluerepl simpleble-static linenoise fmt tabulate)

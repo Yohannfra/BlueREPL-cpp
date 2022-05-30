@@ -14,13 +14,10 @@
 #include <functional>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
-
-static constexpr const char *HISTORY_FILE_PATH = ".blrepl_history.txt";
-
-static std::vector<Command::ICommand *> _commands;
 
 int Repl::printHelp(std::vector<std::string> &args)
 {
@@ -50,11 +47,6 @@ int Repl::printHelp(std::vector<std::string> &args)
 
 Repl::Repl()
 {
-    // init linenoise
-    linenoiseSetHintsCallback(NULL);
-    linenoiseHistoryLoad(HISTORY_FILE_PATH);
-    linenoiseSetMultiLine(1);
-
     // register commands
     _commands.push_back(new Command::Connect);
     _commands.push_back(new Command::Clear);
@@ -68,23 +60,41 @@ Repl::Repl()
     _commands.push_back(new Command::Write);
 }
 
-Repl::~Repl()
+int Repl::setBleController(BleController *bt)
 {
-    std::cout << "Bye" << std::endl;
+    _bt = bt;
+    return EXIT_SUCCESS;
 }
 
-std::optional<std::string> Repl::get_line(int last_exit_code)
+int Repl::loadPreset(Preset::Manager &prm)
 {
-    std::string line;
+    _prm = std::make_unique<Preset::Manager>(prm);
 
-    char *buff = linenoise(last_exit_code == EXIT_SUCCESS ? GREEN(">> ") : RED(">> "));
-
-    if (buff == NULL) {
-        return {};
+    if (_prm == nullptr) {
+        return EXIT_FAILURE;
     }
-    line = buff;
-    free(buff);
-    return line;
+
+    for (const auto &[k, v] : _prm->getPreset().aliases) {
+        _aliasManager.add(k, v);
+    }
+
+    for (const auto &c : _prm->getPreset().commands) {
+        auto all_cmds = this->getAllCommandsNames();
+        if (std::find(all_cmds.begin(), all_cmds.end(), c.getName()) != all_cmds.end()) {
+            std::cerr << "Duplicated command or alias: '" << c.getName() << "'"
+                      << std::endl;
+            return EXIT_FAILURE;
+        }
+    }
+
+    return EXIT_SUCCESS;
+}
+
+Repl::~Repl()
+{
+    if (_started) {
+        std::cout << "Bye" << std::endl;
+    }
 }
 
 int Repl::runAliasCommand(const std::vector<std::string> &args)
@@ -107,18 +117,17 @@ int Repl::runAliasCommand(const std::vector<std::string> &args)
 
 int Repl::run()
 {
+    _started = true;
+
     std::cout << "Type help to list available commands" << std::endl;
     int last_exit_code = EXIT_SUCCESS;
 
     std::optional<std::string> readline;
-    while ((readline = Repl::get_line(last_exit_code)).has_value()) {
+    while ((readline = LineReader::get(last_exit_code)).has_value()) {
         std::string line = readline.value();
         if (!(line[0] != '\0')) {
             continue;
         }
-
-        linenoiseHistoryAdd(line.c_str());
-        linenoiseHistorySave(HISTORY_FILE_PATH);
 
         std::vector<std::string> splitted_line =
             _aliasManager.replaceWithAliases(Utils::splitInArgs(std::string(line)));
@@ -144,11 +153,33 @@ int Repl::run()
             continue;
         }
 
-        for (auto &c : _commands) {
-            if (cmd == c->getName()) {
-                last_exit_code = c->run(args, _bt);
+        for (auto &c : _prm->getPreset().commands) {
+            if (cmd == c.getName()) {
+                c.runAction(*_bt);
                 found = true;
                 break;
+            }
+        }
+
+        for (auto &c : _commands) {
+            if (cmd == c->getName()) {
+                last_exit_code = c->run(args, *_bt);
+                found = true;
+                break;
+            }
+        }
+
+        if (_prm != nullptr) {
+            for (auto &c : _prm->getPreset().commands) { // TODO
+                if (cmd == c.getName()) {
+                    /* std::cout << c.payload << std::endl; */
+                    if (c.getAction() == Preset::Command::Action::WRITE) {
+                        /* Command::Write::run() */
+                    } else if (c.getAction() == Preset::Command::Action::READ) {
+                        /* Command::Read::run() */
+                    }
+                    found = true;
+                }
             }
         }
 
@@ -158,4 +189,19 @@ int Repl::run()
         }
     }
     return last_exit_code;
+}
+
+std::vector<std::string> Repl::getAllCommandsNames()
+{
+    std::vector<std::string> all_cmds;
+
+    for (const auto &c : _commands) {
+        all_cmds.push_back(c->getName());
+    }
+
+    for (const auto &[k, _] : _aliasManager.getAliases()) {
+        all_cmds.push_back(k);
+    }
+
+    return all_cmds;
 }

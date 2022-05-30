@@ -1,29 +1,44 @@
-#include "BleController.hpp"
 #include "Controllers/SimpleBLE/SimpleBleController.hpp"
 #include "Repl/Repl.hpp"
-#include "linenoise.h"
+#include "presets/PresetManager.hpp"
 
-#include <filesystem>
-#include <fmt/core.h>
-#include <fstream>
 #include <iostream>
-#include <optional>
 #include <string>
-#include <toml++/toml.h>
 
-int main()
+static int printUsage(int ret_code)
 {
-    int ret;
+    std::cout << "USAGE: ./bluerepl [preset.toml]" << std::endl;
+    return ret_code;
+}
 
+int main(int argc, const char *argv[])
+{
+    Preset::Manager prm;
+    Repl repl;
+
+    if (argc > 2) {
+        return printUsage(EXIT_FAILURE);
+    }
+
+    if (argc == 2) {
+        if (prm.load(argv[1]) != EXIT_SUCCESS) {
+            return EXIT_FAILURE;
+        }
+        if (repl.loadPreset(prm) != EXIT_SUCCESS) {
+            return EXIT_FAILURE;
+        }
+    }
+
+    int ret;
     try {
         BleController *bt = new SimpleBLEController();
-        Repl repl(*bt);
+        repl.setBleController(bt);
         ret = repl.run();
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
     } catch (...) {
-        std::cerr << "Unknown exception catched. aborting" << std::endl;
+        std::cerr << "Unknown exception catched" << std::endl;
         return EXIT_FAILURE;
     }
     return ret;
