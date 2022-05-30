@@ -3,23 +3,15 @@ DEVICE_NAME = "my_device"
 DEVICE_ADDRESS = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 
 [[services.color]]
-NAME = "color"
+NAME = "color service"
 UUID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 
-[[services.color.red]]
-NAME = "red"
+[[services.color.characteristics.red]]
+NAME = "rgb"
 UUID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-PERMS = ["write", "read"]
-size = 1
 
-[[services.color.green]]
-NAME = "green"
-UUID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-PERMS = ["write", "read"]
-size = 1
-
-[[services.color.blue]]
-NAME = "blue"
-UUID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-PERMS = ["write", "read"]
-size = 1
+[[commands]]
+led_red = ["write", "color service", "rgb", 0xff0000]
+led_green = ["write", "color service", "rgb", 0x00ff00]
+led_blue = ["write", "color service", "rgb", 0x0000ff]
+get_color = ["read", "color service", "rgb"]

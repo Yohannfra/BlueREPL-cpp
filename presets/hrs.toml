@@ -9,9 +9,11 @@ UUID = "0x180D"
 [[services.hrs.characteristics.mesurement]]
 NAME = "Heart rate mesurement"
 UUID = "0x2A37"
-PERMS = ["notify"]
 
 [[services.hrs.characteristics.location]]
 NAME = "Body sensor location"
 UUID = "0x2A38"
-PERMS = ["read"]
+
+[[commands]]
+get_location = ["read", "Heart rate services", "Body sensor location"]
+get_rate = ["read", "Heart rate services", "Heart rate mesurement"]

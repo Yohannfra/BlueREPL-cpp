@@ -2,11 +2,16 @@ DEVICE_NAME = "my_device"
 
 DEVICE_ADDRESS = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 
+autoconnect = true
+
 [[services.battery]]
-NAME = "battery"
-UUID = "0x180"
+NAME = "battery service"
+UUID = "180f"
 
 [[services.battery.characteristics.level]]
 NAME = "level"
-UUID = "0x2A19"
-PERMS = ["read"]
+UUID = "2a19"
+
+[[commands]]
+read_battery = ["read", "battery service", "level"]
+sub_battery = ["notify", "battery service", "level"]
