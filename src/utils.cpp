@@ -25,7 +25,7 @@ bool Utils::isNumber(const std::string &str)
 bool Utils::isAsciiWord(const std::string &str)
 {
     const auto isLetter = [](char c) {
-        return (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z')); //
+        return (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c == '_')); //
     };
 
     if (std::any_of(str.begin(), str.end(), isLetter)) {
