@@ -48,51 +48,9 @@ int Repl::printHelp(std::vector<std::string> &args)
     return EXIT_SUCCESS;
 }
 
-void completion(const char *buf, linenoiseCompletions *lc)
-{
-    std::stringstream l(buf);
-
-    std::vector<std::string> splitted;
-    std::string tmp;
-    while (l >> tmp) {
-        splitted.push_back(tmp);
-    }
-
-    if (splitted.empty()) {
-        return;
-    }
-
-    if (splitted.size() == 1) {
-        for (const auto &c : _commands) {
-            if (buf[0] == c->getName().at(0)) {
-                linenoiseAddCompletion(lc, c->getName().c_str());
-            }
-        }
-    }
-
-// TODO more advanced completion
-#if 0
-    else {
-        /* std::string val = *splitted.end().base(); */
-        auto cmd = splitted.at(0);
-
-        for (auto &c : _commands) {
-            if (c->getName() == cmd) {
-                for (auto &a : c->getArgumentList()) {
-                    if ('-' == a.name.at(0)) {
-                        linenoiseAddCompletion(lc, a.name.c_str());
-                    }
-                }
-            }
-        }
-    }
-#endif
-}
-
-Repl::Repl(BleController &bt) : _bt(bt)
+Repl::Repl()
 {
     // init linenoise
-    linenoiseSetCompletionCallback(completion);
     linenoiseSetHintsCallback(NULL);
     linenoiseHistoryLoad(HISTORY_FILE_PATH);
     linenoiseSetMultiLine(1);
