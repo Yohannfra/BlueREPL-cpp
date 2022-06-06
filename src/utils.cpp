@@ -2,15 +2,14 @@
 
 #include <fmt/core.h>
 #include <iomanip>
-#include <iostream>
 #include <limits>
 #include <regex>
 #include <sstream>
-#include <string>
 
 bool Utils::isMacAddress(const std::string &str)
 {
-    constexpr char REGEX_STR[] = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}";
+    constexpr char REGEX_STR[] =
+        "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}";
 
     return std::regex_match(str, std::regex(REGEX_STR));
 }
@@ -79,6 +78,8 @@ void Utils::printBleValue(const std::string &str, BleDataType type)
         case BleDataType::BINARY:
             Utils::printAsBinary(str);
             break;
+        default:
+            break;
     }
 }
 
@@ -132,6 +133,16 @@ bool Utils::isDecimalNumber(const std::string &s)
     return true;
 }
 
+bool Utils::isBinaryNumber(const std::string &s)
+{
+    for (const auto &c : s) {
+        if (!(c == '0' || c == '1')) {
+            return false;
+        }
+    }
+    return true;
+}
+
 std::optional<ByteArray> Utils::parseDecStr(const std::string &str)
 {
     ByteArray out;
@@ -178,6 +189,10 @@ std::optional<ByteArray> Utils::parseBinStr(const std::string &str)
     for (const auto &b : splitted) {
         long n;
 
+        if (!Utils::isBinaryNumber(b)) {
+            return {};
+        }
+
         try {
             n = std::stol(b, nullptr, 2);
         } catch (std::invalid_argument) {
@@ -203,4 +218,27 @@ void Utils::printStringVector(const std::vector<std::string> &vec)
         std::cout << "'" << v << "' ";
     }
     std::cout << "}" << std::endl;
+}
+
+std::map<std::string, BleDataType> Utils::tokenizeLine(const std::string &line)
+{
+    std::map<std::string, BleDataType> mp;
+
+    auto spl = Utils::splitInArgs(line);
+
+    for (auto &w : spl) {
+        if (w.at(0) == '\'' && w.at(w.size() - 1) == '\'') {
+            mp[w] = BleDataType::ASCII;
+        } else if (w.rfind("0x", 0) == 0 || w.rfind("0X", 0) == 0) {
+            mp[w] = BleDataType::HEXADECIMAL;
+        } else if (w.rfind("0b", 0) == 0 || w.rfind("0B", 0) == 0) {
+            mp[w] = BleDataType::BINARY;
+        } else if (Utils::isDecimalNumber(w)) {
+            mp[w] = BleDataType::DECIMAL;
+        } else {
+            std::cerr << "Invalid argument: '" << w << "'" << std::endl;
+            return {};
+        }
+    }
+    return mp;
 }

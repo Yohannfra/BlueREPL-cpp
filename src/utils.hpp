@@ -2,6 +2,7 @@
 #define UTILS_HPP
 
 #include <iostream>
+#include <map>
 #include <optional>
 #include <string>
 #include <vector>
@@ -10,7 +11,7 @@
 #define RED(s)   "\x1b[0;31m" s "\x1b[0m"
 #define GREEN(s) "\x1b[0;32m" s "\x1b[0m"
 
-enum class BleDataType { ASCII, BINARY, DECIMAL, HEXADECIMAL };
+enum class BleDataType { ERROR = 0, ASCII, BINARY, DECIMAL, HEXADECIMAL };
 
 using BluetoothUUID = std::string;
 using BluetoothAddress = std::string;
@@ -75,6 +76,17 @@ namespace Utils {
     bool isDecimalNumber(const std::string &str);
 
     /**
+     * @brief Tells if a string represents a binary number
+     *
+     * ex: 1 0 0110  11000
+     *
+     * @param str string to check
+     *
+     * @return true or false
+     */
+    bool isBinaryNumber(const std::string &s);
+
+    /**
      * @brief Tells if a string is only composed of ascii letters
      * [a-z][A-Z]
      *
@@ -90,6 +102,21 @@ namespace Utils {
      * @param vec vec to print
      */
     void printStringVector(const std::vector<std::string> &vec);
+
+    /**
+     * @brief 'tokenize' a string representing one or multiple values
+     *
+     * @param line string containing the values
+     *
+     * How it works:
+     * 0b | 0B -> Binary
+     * 0x | 0X -> Hexa
+     * 'quoted' -> Ascii
+     * 124 -> Decimal
+     *
+     * @return map containing each values and their types
+     */
+    std::map<std::string, BleDataType> tokenizeLine(const std::string &line);
 } // namespace Utils
 
 #endif

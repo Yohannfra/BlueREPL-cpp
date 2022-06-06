@@ -1,11 +1,11 @@
 BIN_NAME=bluerepl
 
-build:
+compile: gen
 	@cmake --build build
 	@cp ./build/compile_commands.json .
 	@cp ./build/$(BIN_NAME) .
 
-gen:
+gen: build
 	@cmake -S . -B build
 
 clean:
@@ -13,7 +13,14 @@ clean:
 
 re: clean gen build
 
+run_tests:
+	cmake -S . -B build
+	@cd tests/ && \
+			cmake -S . -B build && \
+			cmake --build build && \
+			./build/bluerepl_test
+
 lint:
 	cppcheck --quiet --enable=warning,style,performance,portability src
 
-.PHONY: build gen clean re lint
+.PHONY: compile gen clean re lint run_tests
