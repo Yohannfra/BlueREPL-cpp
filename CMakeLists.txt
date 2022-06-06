@@ -68,6 +68,7 @@ target_include_directories(linenoise PUBLIC lib/linenoise-mob)
 add_subdirectory(lib/SimpleBLE)
 include_directories(${SIMPLEBLE_INCLUDES})
 
+# tabulate
 add_subdirectory(lib/tabulate)
 
 target_link_libraries(bluerepl simpleble-static linenoise fmt tabulate)
