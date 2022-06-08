@@ -11,10 +11,10 @@ Preset::Manager::Manager()
 {
 }
 
-int Preset::Manager::load(const std::string &fp)
+int Preset::Manager::loadFromFile(const std::filesystem::path &fp)
 {
     _preset.fp = fp;
-    if (_parser.parse(fp, _preset) == EXIT_FAILURE) {
+    if (_parser.parseFile(fp, _preset) == EXIT_FAILURE) {
         std::cerr << "Failed to parse '" << fp << "'" << std::endl;
         return EXIT_FAILURE;
     }

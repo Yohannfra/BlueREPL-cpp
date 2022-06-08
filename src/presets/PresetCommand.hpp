@@ -3,6 +3,7 @@
 
 #include "BleController.hpp"
 
+#include <iostream>
 #include <string>
 #include <string_view>
 #include <variant>
@@ -62,5 +63,8 @@ namespace Preset {
         std::vector<PayloadVariant> _payload;
     };
 } // namespace Preset
+
+// for cout
+std::ostream &operator<<(std::ostream &os, Preset::Command const &m);
 
 #endif

@@ -3,14 +3,16 @@
 
 #include "Preset.h"
 
+#include <filesystem>
 #include <toml++/toml.h>
 
 namespace Preset {
     class Parser {
     public:
-        int parse(const std::string &fp, Preset &dest);
+        int parseFile(const std::filesystem::path &fp, Preset &dest);
 
     private:
+        int parseAll(toml::table &tbl, Preset &dest);
         void parseServices(toml::table services, Preset &dest);
         void parseCharacteristic(const std::string &name,
             toml::node_view<toml::node> characteristic, Service &service);

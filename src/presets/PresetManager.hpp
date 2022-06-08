@@ -4,6 +4,7 @@
 #include "Preset.h"
 #include "PresetParser.hpp"
 
+#include <filesystem>
 #include <string>
 
 namespace Preset {
@@ -11,7 +12,7 @@ namespace Preset {
     public:
         Manager();
 
-        int load(const std::string &fp);
+        int loadFromFile(const std::filesystem::path &fp);
         void print() const;
         Preset &getPreset();
 

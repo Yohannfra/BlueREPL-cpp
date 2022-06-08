@@ -3,10 +3,10 @@
 
 #include "PresetCommand.hpp"
 
+#include <map>
 #include <string>
 #include <variant>
 #include <vector>
-#include <map>
 
 namespace Preset {
     struct Characteristic {
@@ -23,6 +23,7 @@ namespace Preset {
     struct Preset {
         std::string fp;
         std::string name;
+        bool autoconnect;
         std::string mac;
         std::vector<Service> services;
         std::map<std::string, std::string> aliases;

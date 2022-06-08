@@ -3,23 +3,27 @@
 #include <iostream>
 #include <optional>
 
-int Preset::Parser::parse(const std::string &fp, Preset &dest)
+int Preset::Parser::parseFile(const std::filesystem::path &fp, Preset &dest)
 {
     toml::table tbl;
 
     try {
-        tbl = toml::parse_file(fp);
+        tbl = toml::parse_file(fp.string());
     } catch (const std::exception &e) {
         std::cerr << fp << ": " << e.what() << std::endl;
         return EXIT_FAILURE;
     }
+    return this->parseAll(tbl, dest);
+}
 
+int Preset::Parser::parseAll(toml::table &tbl, Preset &dest)
+{
     // Device name
     auto device_name = tbl["DEVICE_NAME"].value<std::string>();
     if (device_name.has_value()) {
         dest.name = device_name.value();
     } else {
-        std::cerr << "Invalid or missing DEVICE_NAME" << std::endl;
+        std::cerr << "Invalid or missing 'DEVICE_NAME'" << std::endl;
     }
 
     // Device mac address
@@ -27,11 +31,19 @@ int Preset::Parser::parse(const std::string &fp, Preset &dest)
     if (device_addr.has_value()) {
         dest.mac = device_addr.value();
     } else {
-        std::cerr << "Invalid or missing DEVICE_ADDRESS" << std::endl;
+        std::cerr << "Invalid or missing 'DEVICE_ADDRESS'" << std::endl;
+    }
+
+    // autoconnect
+    auto is_autoconnect = tbl["autoconnect"].value<bool>();
+    if (is_autoconnect.has_value()) {
+        dest.autoconnect = is_autoconnect.value();
+    } else {
+        dest.autoconnect = false;
     }
 
     // Services
-    if (tbl["services"]) {
+    if (tbl["services"] && tbl["services"].is_table()) {
         this->parseServices(*tbl["services"].as_table(), dest);
     }
 
@@ -75,13 +87,17 @@ int Preset::Parser::parse(const std::string &fp, Preset &dest)
             if (command.getAction() == Command::Action::WRITE) {
                 for (std::size_t i = 3; i < val.size(); i++) {
                     if (val[i].type() == toml::node_type::integer) {
-                        const std::uint8_t n = val[i].value<int>().value();
+                        auto n = val[i].value<std::uint8_t>().value();
                         command.addPayload(n);
                     } else if (val[i].type() == toml::node_type::floating_point) {
+                        const double s = val[i].value<double>().value();
+                        command.addPayload(s);
+                    } else if (val[i].type() == toml::node_type::string) {
                         const std::string s = val[i].value<std::string>().value();
                         command.addPayload(s);
                     } else {
-                        std::cerr << "Invalid payload type" << val[i].type() << std::endl;
+                        std::cerr << "Invalid payload type " << val[i].type()
+                                  << std::endl;
                         return EXIT_FAILURE;
                     }
                 }
@@ -138,7 +154,7 @@ void Preset::Parser::parseServices(toml::table services, Preset &dest)
 
         // Characteristics
         if (service_table["characteristics"]) {
-            for (const auto &[c, _] :
+            for (const auto &[c, __] :
                 *service_table["characteristics"].node()->as_table()) {
                 auto current_characteristic = service_table["characteristics"][c][0];
                 this->parseCharacteristic(

@@ -13,13 +13,13 @@ Preset::Command::Command(Action action, const std::string &name,
 {
 }
 
-Preset::Command::Command(const Command &c)
+Preset::Command::Command(const Command &c) :
+    _action(c._action),
+    _name(c._name),
+    _service(c._service),
+    _characteristic(c._characteristic),
+    _payload(c._payload)
 {
-    _action = c._action;
-    _name = c._name;
-    _service = c._service;
-    _characteristic = c._characteristic;
-    _payload = c._payload;
 }
 
 int Preset::Command::runAction(BleController &bt)
@@ -133,14 +133,23 @@ const std::string Preset::Command::getPayloadAsStr() const
     std::string out = "";
 
     for (const auto &p : _payload) {
+        if (!out.empty()) {
+            out += " ";
+        }
+
         try {
             auto n = std::get<std::uint8_t>(p);
-            out += std::to_string(n) + " ";
+            out += std::to_string(n);
         } catch (...) {
             auto s = std::get<std::string>(p);
-            out += s + " ";
+            out += s;
         }
     }
 
     return out;
+}
+
+std::ostream &operator<<(std::ostream &os, Preset::Command const &m)
+{
+    return os << m.getActionAsStr() + " " + m.getService() + " " + m.getCharacteristic();
 }

@@ -23,11 +23,11 @@ bool Utils::isNumber(const std::string &str)
 
 bool Utils::isAsciiWord(const std::string &str)
 {
-    const auto isLetter = [](char c) {
+    const auto isntLetter = [](char c) {
         return (!(c >= 'a' && c <= 'z') && !(c >= 'A' && c <= 'Z') && !(c == '_')); //
     };
 
-    if (std::any_of(str.begin(), str.end(), isLetter)) {
+    if (std::any_of(str.begin(), str.end(), isntLetter)) {
         return false;
     }
     return true;
@@ -124,10 +124,12 @@ std::optional<ByteArray> Utils::parseHexStr(const std::string &str)
 
 bool Utils::isDecimalNumber(const std::string &s)
 {
-    for (const auto &c : s) {
-        if (!((c >= '0' && c <= '9') || c == '-')) {
-            return false;
-        }
+    const auto isntdec = [](char c) {
+        return !((c >= '0' && c <= '9') || c == '-');
+    };
+
+    if (std::any_of(s.begin(), s.end(), isntdec) || s.empty()) {
+        return false;
     }
 
     return true;
@@ -135,10 +137,12 @@ bool Utils::isDecimalNumber(const std::string &s)
 
 bool Utils::isBinaryNumber(const std::string &s)
 {
-    for (const auto &c : s) {
-        if (!(c == '0' || c == '1')) {
-            return false;
-        }
+    const auto isntbin = [](char c) {
+        return (c != '0' && c != '1');
+    };
+
+    if (std::any_of(s.begin(), s.end(), isntbin) || s.empty()) {
+        return false;
     }
     return true;
 }

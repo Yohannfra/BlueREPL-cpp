@@ -6,12 +6,12 @@ DEVICE_ADDRESS = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 NAME = "color service"
 UUID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 
-[[services.color.characteristics.red]]
+[[services.color.characteristics.rgb]]
 NAME = "rgb"
 UUID = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 
 [[commands]]
-led_red = ["write", "color service", "rgb", 0xff0000]
-led_green = ["write", "color service", "rgb", 0x00ff00]
-led_blue = ["write", "color service", "rgb", 0x0000ff]
+led_red = ["write", "color service", "rgb", 0xff, 0x00, 0x00]
+led_green = ["write", "color service", "rgb", 0x00, 0xff, 0x00]
+led_blue = ["write", "color service", "rgb", 0x00, 0x00, 0xff]
 get_color = ["read", "color service", "rgb"]

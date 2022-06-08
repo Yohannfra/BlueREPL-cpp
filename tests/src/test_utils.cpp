@@ -29,6 +29,23 @@ TEST(test_utils, test_isMacAddress)
     EXPECT_FALSE(Utils::isMacAddress(""));
 }
 
+TEST(test_utils, test_isBinaryNumber)
+{
+    // empty
+    EXPECT_FALSE(Utils::isBinaryNumber(""));
+
+    // bad data
+    EXPECT_FALSE(Utils::isBinaryNumber("abc"));
+    EXPECT_FALSE(Utils::isBinaryNumber("123"));
+
+    // ok
+    EXPECT_TRUE(Utils::isBinaryNumber("10"));
+    EXPECT_TRUE(Utils::isBinaryNumber("01"));
+    EXPECT_TRUE(Utils::isBinaryNumber("0111000110"));
+    EXPECT_TRUE(Utils::isBinaryNumber("0011011011"));
+
+}
+
 TEST(test_utils, test_isNumber)
 {
     // positive number
@@ -124,17 +141,17 @@ TEST(test_utils, test_parseBinStr)
     // 1
     tmp = Utils::parseBinStr("1");
     EXPECT_TRUE(tmp.has_value());
-    EXPECT_TRUE((std::uint8_t)tmp.value().at(0) == 0b1);
+    EXPECT_EQ((std::uint8_t)tmp.value().at(0), 0b1);
 
     // 0
     tmp = Utils::parseBinStr("0");
     EXPECT_TRUE(tmp.has_value());
-    EXPECT_TRUE((std::uint8_t)tmp.value().at(0) == 0b0);
+    EXPECT_EQ((std::uint8_t)tmp.value().at(0), 0b0);
 
     // ff
     tmp = Utils::parseBinStr("11111111");
     EXPECT_TRUE(tmp.has_value());
-    EXPECT_TRUE((std::uint8_t)tmp.value().at(0) == 0b11111111);
+    EXPECT_EQ((std::uint8_t)tmp.value().at(0), 0b11111111);
 
     // decimal number
     tmp = Utils::parseBinStr("123");

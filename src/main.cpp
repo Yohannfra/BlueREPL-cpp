@@ -21,7 +21,7 @@ int main(int argc, const char *argv[])
     }
 
     if (argc == 2) {
-        if (prm.load(argv[1]) != EXIT_SUCCESS) {
+        if (prm.loadFromFile(argv[1]) != EXIT_SUCCESS) {
             return EXIT_FAILURE;
         }
         if (repl.loadPreset(prm) != EXIT_SUCCESS) {

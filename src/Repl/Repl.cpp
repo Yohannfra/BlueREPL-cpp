@@ -45,7 +45,7 @@ int Repl::printHelp(std::vector<std::string> &args)
     return EXIT_SUCCESS;
 }
 
-Repl::Repl()
+Repl::Repl() : _bt(nullptr)
 {
     // register commands
     _commands.push_back(new Command::Connect);

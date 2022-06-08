@@ -4,15 +4,15 @@ DEVICE_ADDRESS = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 
 [[services.hrs]]
 NAME = "Heart rate services"
-UUID = "0x180D"
+UUID = "180d"
 
 [[services.hrs.characteristics.mesurement]]
 NAME = "Heart rate mesurement"
-UUID = "0x2A37"
+UUID = "2a37"
 
 [[services.hrs.characteristics.location]]
 NAME = "Body sensor location"
-UUID = "0x2A38"
+UUID = "2a38"
 
 [[commands]]
 get_location = ["read", "Heart rate services", "Body sensor location"]

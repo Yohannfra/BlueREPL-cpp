@@ -18,7 +18,8 @@ run_tests:
 	@cd tests/ && \
 			cmake -S . -B build && \
 			cmake --build build && \
-			./build/bluerepl_test
+			cd build && \
+			./bluerepl_test
 
 lint:
 	cppcheck --quiet --enable=warning,style,performance,portability src

@@ -24,20 +24,35 @@ add_executable(
   src/test_utils.cpp
   ../src/utils.cpp
   ../src/utils.hpp
+
+  # presets
+  src/test_presets.cpp
+  ../src/presets/Preset.h
+  ../src/presets/PresetCommand.cpp
+  ../src/presets/PresetCommand.hpp
+  ../src/presets/PresetManager.cpp
+  ../src/presets/PresetManager.hpp
+  ../src/presets/PresetParser.cpp
+  ../src/presets/PresetParser.hpp
 )
 
 target_include_directories(
   bluerepl_test PUBLIC
   ../src
+  ../lib/tomlplusplus/include
     )
 
 # simpleBLE
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../lib/SimpleBLE ${CMAKE_BINARY_DIR}/simpleble)
 include_directories(${SIMPLEBLE_INCLUDES})
 
+# tabulate
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../lib/tabulate ${CMAKE_BINARY_DIR}/tabulate)
+
 target_link_libraries(
   bluerepl_test
   simpleble-static
+  tabulate
   fmt
   gtest_main
 )
