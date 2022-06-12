@@ -18,11 +18,13 @@ namespace Command {
             _hint = "Connect to a ble device";
             _usage = "identifier";
 
-            _args.add({"identifier", "identifier of the device to connect to", true, false, false});
+            _args.add({"identifier", "identifier of the device to connect to", true,
+                false, false});
 
             _help = "The identifier can be of three different types:\n"
                     "\t- integer -> connection by index of the device in the scan list\n"
-                    "\t- a string mac address (format XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX) -> connection by "
+                    "\t- a string mac address (format "
+                    "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX) -> connection by "
                     "using the mac address of the device\n"
                     "\t- any other string -> connection by using name of the device";
         }
@@ -33,19 +35,24 @@ namespace Command {
                 std::cerr << "Invalid usage, see 'help connect'" << std::endl;
                 return EXIT_FAILURE;
             }
+            return connectById(args.at(0), bt);
+        }
 
-            if (Utils::isNumber(args.at(0))) {
+        int connectById(const std::string &deviceid, BleController &bt)
+        {
+            int ret;
+
+            if (Utils::isNumber(deviceid)) {
                 std::cout << "Connecting by index" << std::endl;
-                bt.connectByIndex(std::stoi(args.at(0)));
-            } else if (Utils::isMacAddress(args.at(0))) {
+                ret = bt.connectByIndex(std::stoi(deviceid));
+            } else if (Utils::isMacAddress(deviceid)) {
                 std::cout << "Connecting by address" << std::endl;
-                bt.connectByAddress(args.at(0));
+                ret = bt.connectByAddress(deviceid);
             } else {
                 std::cout << "Connecting by name" << std::endl;
-                bt.connectByName(args.at(0));
+                ret = bt.connectByName(deviceid);
             }
-
-            return EXIT_SUCCESS;
+            return ret;
         }
     };
 } // namespace Command

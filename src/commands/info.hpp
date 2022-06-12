@@ -17,9 +17,11 @@ namespace Command {
             _hint = "print informations about topic";
             _usage = "device | services";
 
-            _args.add({"device", "\tPrint information about the ble device connected", false, false, true});
-            _args.add({"services", "Describes the services and characteristics of the ble device connected", false,
-                false, true});
+            _args.add({"device", "\tPrint information about the ble device connected",
+                false, false, true});
+            _args.add({"services",
+                "Describes the services and characteristics of the ble device connected",
+                false, false, true});
         }
 
         int run(std::vector<std::string> &args, BleController &bt) override

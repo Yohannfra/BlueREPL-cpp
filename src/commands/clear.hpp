@@ -18,7 +18,8 @@ namespace Command {
             _hint = "clear the screen";
         }
 
-        int run([[maybe_unused]] std::vector<std::string> &args, [[maybe_unused]] BleController &bt) override
+        int run([[maybe_unused]] std::vector<std::string> &args,
+            [[maybe_unused]] BleController &bt) override
         {
             linenoiseClearScreen();
             return EXIT_SUCCESS;

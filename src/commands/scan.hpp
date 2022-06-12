@@ -16,7 +16,8 @@ namespace Command {
             _name = "scan";
             _hint = "Search for BLE devices around";
             _usage = "[timeout]";
-            _args.add({"timeout", "scan duration (in seconds), 5 by default", false, false, false});
+            _args.add({"timeout", "scan duration (in seconds), 5 by default", false,
+                false, false});
         }
 
         int run(std::vector<std::string> &args, BleController &bt) override

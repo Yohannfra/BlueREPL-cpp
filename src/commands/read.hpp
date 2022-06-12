@@ -18,8 +18,10 @@ namespace Command {
             _usage = "service_uuid characteristic_uuid [-a] [-x] [-d]";
 
             _args.add(
-                {"service_uuid", "\tuuid of the service in which the characteristic is", true, false, false});
-            _args.add({"characteristic_uuid", "uuid of the characteristic to read", true, false, false});
+                {"service_uuid", "\tuuid of the service in which the characteristic is",
+                    true, false, false});
+            _args.add({"characteristic_uuid", "uuid of the characteristic to read", true,
+                false, false});
             _args.add({"-a", "\t\tprint as ascii", false, true, true});
             _args.add({"-b", "\t\tprint as binary", false, true, true});
             _args.add({"-d", "\t\tprint as decimal", false, true, true});

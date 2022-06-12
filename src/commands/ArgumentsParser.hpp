@@ -35,7 +35,8 @@ namespace Command {
         {
             std::vector<std::string> filteredVector;
 
-            std::copy_if(all_args.begin(), all_args.end(), std::back_inserter(filteredVector),
+            std::copy_if(all_args.begin(), all_args.end(),
+                std::back_inserter(filteredVector),
                 [](std::string arg) { return arg.at(0) == '-'; });
 
             return filteredVector;
@@ -45,7 +46,8 @@ namespace Command {
         {
             std::vector<std::string> filteredVector;
 
-            std::copy_if(all_args.begin(), all_args.end(), std::back_inserter(filteredVector),
+            std::copy_if(all_args.begin(), all_args.end(),
+                std::back_inserter(filteredVector),
                 [](std::string arg) { return arg.at(0) != '-'; });
 
             return filteredVector;
@@ -58,7 +60,8 @@ namespace Command {
 
         std::size_t getNumberOfRequiredArgs() const
         {
-            return std::count_if(_args.begin(), _args.end(), [](Argument a) { return a.required; });
+            return std::count_if(
+                _args.begin(), _args.end(), [](Argument a) { return a.required; });
         }
 
         std::size_t getNumberArgs() const

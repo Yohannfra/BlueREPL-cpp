@@ -24,4 +24,12 @@ run_tests:
 lint:
 	cppcheck --quiet --enable=warning,style,performance,portability src
 
-.PHONY: compile gen clean re lint run_tests
+format:
+	clang-format -i \
+			src/*/**.cpp \
+			src/*/**.hpp \
+			src/*/**.h \
+			tests/src/*.cpp
+
+
+.PHONY: compile gen clean re lint run_tests format

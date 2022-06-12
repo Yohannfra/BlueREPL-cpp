@@ -18,9 +18,10 @@ namespace Command {
             _usage = "service_uuid characteristic_uuid";
 
             _args.add(
-                {"service_uuid", "\tuuid of the service in which the characteristic is", true, false, false});
-            _args.add(
-                {"characteristic_uuid", "uuid of the characteristic to unsubscribe from", true, false, false});
+                {"service_uuid", "\tuuid of the service in which the characteristic is",
+                    true, false, false});
+            _args.add({"characteristic_uuid",
+                "uuid of the characteristic to unsubscribe from", true, false, false});
         }
 
         int run(std::vector<std::string> &args, BleController &bt) override

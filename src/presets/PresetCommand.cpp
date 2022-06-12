@@ -14,11 +14,8 @@ Preset::Command::Command(Action action, const std::string &name,
 }
 
 Preset::Command::Command(const Command &c) :
-    _action(c._action),
-    _name(c._name),
-    _service(c._service),
-    _characteristic(c._characteristic),
-    _payload(c._payload)
+    _action(c._action), _name(c._name), _service(c._service),
+    _characteristic(c._characteristic), _payload(c._payload)
 {
 }
 

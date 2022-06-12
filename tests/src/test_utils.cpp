@@ -43,7 +43,6 @@ TEST(test_utils, test_isBinaryNumber)
     EXPECT_TRUE(Utils::isBinaryNumber("01"));
     EXPECT_TRUE(Utils::isBinaryNumber("0111000110"));
     EXPECT_TRUE(Utils::isBinaryNumber("0011011011"));
-
 }
 
 TEST(test_utils, test_isNumber)
