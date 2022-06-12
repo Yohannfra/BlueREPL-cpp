@@ -1,6 +1,6 @@
 #include "SimpleBleController.hpp"
 
-#include "Repl/Repl.hpp"
+#include "Repl/LineReader.hpp"
 
 #include <exception>
 #include <iomanip>
@@ -23,17 +23,18 @@ void SimpleBLEController::selectAdapter()
 
     if (adapter_list.size() == 1) {
         _adapter = adapter_list.at(0);
-        std::cout << "Using " << _adapter.identifier() << " [" << _adapter.address() << "]" << std::endl;
+        std::cout << "Using " << _adapter.identifier() << " [" << _adapter.address()
+                  << "]" << std::endl;
     } else {
         std::cout << "Available adapters: \n";
         int i = 0;
         for (auto &adapter : adapter_list) {
-            std::cout << "[" << i++ << "] " << adapter.identifier() << " [" << adapter.address() << "]"
-                      << std::endl;
+            std::cout << "[" << i++ << "] " << adapter.identifier() << " ["
+                      << adapter.address() << "]" << std::endl;
         }
 
         std::cout << "Which one to use ?" << std::endl;
-        auto rep = Repl::get_line();
+        auto rep = LineReader::get();
         if (rep.has_value()) {
             std::stringstream s;
             s << rep.value();
@@ -42,7 +43,8 @@ void SimpleBLEController::selectAdapter()
             if (index < adapter_list.size()) {
                 _adapter = adapter_list.at(index);
                 std::cout << "Using adapter:" << std::endl;
-                std::cout << _adapter.identifier() << " [" << _adapter.address() << "]" << std::endl;
+                std::cout << _adapter.identifier() << " [" << _adapter.address() << "]"
+                          << std::endl;
             } else {
                 throw std::invalid_argument("Invalid index, try again");
             }
@@ -50,11 +52,13 @@ void SimpleBLEController::selectAdapter()
     }
 }
 
-std::string SimpleBLEController::byte_array_to_string(const SimpleBLE::ByteArray &bytes) const
+std::string SimpleBLEController::byte_array_to_string(
+    const SimpleBLE::ByteArray &bytes) const
 {
     std::ostringstream oss;
     for (auto byte : bytes) {
-        oss << std::hex << std::setfill('0') << std::setw(2) << (std::uint32_t)((std::uint8_t)byte) << " ";
+        oss << std::hex << std::setfill('0') << std::setw(2)
+            << (std::uint32_t)((std::uint8_t)byte) << " ";
     }
     return oss.str();
 }
@@ -63,14 +67,18 @@ void SimpleBLEController::printScannedPeripheral()
 {
     std::size_t index = 0;
     for (auto &per : _scannedPeripherals) {
-        std::string connectable_string = per.is_connectable() ? "Connectable" : "Non-Connectable";
+        std::string connectable_string =
+            per.is_connectable() ? "Connectable" : "Non-Connectable";
         std::string peripheral_string = per.identifier() + " [" + per.address() + "]";
 
-        std::cout << "[" << index << "] " << peripheral_string << " " << connectable_string << "\n";
-        std::map<uint16_t, SimpleBLE::ByteArray> manufacturer_data = per.manufacturer_data();
+        std::cout << "[" << index << "] " << peripheral_string << " "
+                  << connectable_string << "\n";
+        std::map<uint16_t, SimpleBLE::ByteArray> manufacturer_data =
+            per.manufacturer_data();
         for (const auto &[manufacturer_id, data] : manufacturer_data) {
             std::cout << "\tManufacturer ID:\t" << manufacturer_id << "\n";
-            std::cout << "\tManufacturer data:\t" << byte_array_to_string(data) << "\n" << std::endl;
+            std::cout << "\tManufacturer data:\t" << byte_array_to_string(data) << "\n"
+                      << std::endl;
         }
         index += 1;
     }
@@ -96,7 +104,8 @@ int SimpleBLEController::scan(std::uint32_t scan_time_second, bool print_results
 
 int SimpleBLEController::internal_connect()
 {
-    std::cout << "Connecting to " << _peripheral.identifier() << " [" << _peripheral.address() << "]" << std::endl;
+    std::cout << "Connecting to " << _peripheral.identifier() << " ["
+              << _peripheral.address() << "]" << std::endl;
     _peripheral.connect();
 
     if (!_peripheral.is_connected()) {
@@ -216,7 +225,8 @@ int SimpleBLEController::print_peripheral_infos()
     return EXIT_SUCCESS;
 }
 
-SimpleBLE::ByteArray SimpleBLEController::read(std::string const &service, std::string const &characteristic)
+SimpleBLE::ByteArray SimpleBLEController::read(
+    std::string const &service, std::string const &characteristic)
 {
     SimpleBLE::ByteArray read_bytes;
 
@@ -228,8 +238,8 @@ SimpleBLE::ByteArray SimpleBLEController::read(std::string const &service, std::
     return _peripheral.read(service, characteristic);
 }
 
-int SimpleBLEController::write(
-    BluetoothUUID const &service, BluetoothUUID const &characteristic, const ByteArray &payload)
+int SimpleBLEController::write(BluetoothUUID const &service,
+    BluetoothUUID const &characteristic, const ByteArray &payload)
 {
     if (!this->isConnected()) {
         std::cerr << "No device connected" << std::endl;
@@ -245,8 +255,8 @@ int SimpleBLEController::write(
     }
 }
 
-int SimpleBLEController::notify(BluetoothUUID const &service, BluetoothUUID const &characteristic,
-    std::function<void(ByteArray payload)> callback)
+int SimpleBLEController::notify(BluetoothUUID const &service,
+    BluetoothUUID const &characteristic, std::function<void(ByteArray payload)> callback)
 {
     if (!this->isConnected()) {
         std::cerr << "No device connected" << std::endl;
@@ -262,8 +272,8 @@ int SimpleBLEController::notify(BluetoothUUID const &service, BluetoothUUID cons
     }
 }
 
-int SimpleBLEController::indicate(BluetoothUUID const &service, BluetoothUUID const &characteristic,
-    std::function<void(ByteArray payload)> callback)
+int SimpleBLEController::indicate(BluetoothUUID const &service,
+    BluetoothUUID const &characteristic, std::function<void(ByteArray payload)> callback)
 {
     if (!this->isConnected()) {
         std::cerr << "No device connected" << std::endl;
@@ -279,7 +289,8 @@ int SimpleBLEController::indicate(BluetoothUUID const &service, BluetoothUUID co
     }
 }
 
-int SimpleBLEController::unsubscribe(BluetoothUUID const &service, BluetoothUUID const &characteristic)
+int SimpleBLEController::unsubscribe(
+    BluetoothUUID const &service, BluetoothUUID const &characteristic)
 {
     if (!this->isConnected()) {
         std::cerr << "No device connected" << std::endl;
