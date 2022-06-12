@@ -27,6 +27,17 @@ int AliasManager::add(const std::string &key, const std::string &value)
         return EXIT_FAILURE;
     }
 
+    if (key == value) {
+        std::cerr << "Key and value are the identical" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    if (std::any_of(
+            value.begin(), value.end(), [](char c) { return c == ' ' || c == '\t'; })) {
+        std::cerr << "Values can't have blank spaces" << std::endl;
+        return EXIT_FAILURE;
+    }
+
     _aliases[key] = value;
 
     return this->printAlias(key);
@@ -57,24 +68,35 @@ int AliasManager::deleteAlias(std::string key)
         return EXIT_FAILURE;
     }
 
+    std::cout << "Deleting alias " << key << std::endl;
     _aliases.erase(key);
 
     return EXIT_SUCCESS;
 }
 
-std::vector<std::string> AliasManager::replaceWithAliases(const std::vector<std::string> &in)
+std::vector<std::string> AliasManager::replaceWithAliases(
+    const std::vector<std::string> &base)
 {
+    bool done;
     std::vector<std::string> out;
+    std::vector<std::string> in = base;
 
-    for (const auto &w : in) {
-        auto res = _aliases.find(w);
+    do {
+        done = true;
+        out.clear();
 
-        if (res == _aliases.end()) {
-            out.push_back(w);
-        } else {
-            out.push_back((*res).second);
+        for (const auto &w : in) {
+            auto res = _aliases.find(w);
+
+            if (res == _aliases.end()) {
+                out.push_back(w);
+            } else {
+                out.push_back((*res).second);
+                done = false;
+            }
         }
-    }
+        in = out;
+    } while (!done);
 
     return out;
 }

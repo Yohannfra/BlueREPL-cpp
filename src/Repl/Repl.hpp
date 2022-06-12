@@ -19,10 +19,14 @@ public:
     ~Repl();
     int run();
 
+#ifndef GOOGLE_TESTS_BUILD // to make these functions public when testing
 private:
+#endif
+
     std::vector<std::string> getAllCommandsNames();
     int printHelp(std::vector<std::string> &args);
     int runAliasCommand(const std::vector<std::string> &args);
+    int runCommand(const std::string &line, bool &quit);
 
     BleController *_bt;
     AliasManager _aliasManager;

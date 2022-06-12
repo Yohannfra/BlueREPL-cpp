@@ -62,6 +62,11 @@ Repl::Repl() : _bt(nullptr)
 
 int Repl::setBleController(BleController *bt)
 {
+    if (bt == nullptr) {
+        std::cerr << "Ble controller set is null" << std::endl;
+        return EXIT_FAILURE;
+    }
+
     _bt = bt;
     return EXIT_SUCCESS;
 }
@@ -102,25 +107,67 @@ int Repl::runAliasCommand(const std::vector<std::string> &args)
     if (args.empty()) {
         return _aliasManager.printAliases();
     } else if (args.size() == 1) {
-        return _aliasManager.printAlias(args.at(0));
+        return _aliasManager.deleteAlias(args.at(0));
     } else if (args.size() == 2) {
-        if (args.at(1).empty()) {
-            return _aliasManager.deleteAlias(args.at(0));
-        } else {
-            return _aliasManager.add(args.at(0), args.at(1));
-        }
+        return _aliasManager.add(args.at(0), args.at(1));
     } else {
         std::cerr << "Unknown alias command" << std::endl;
         return EXIT_FAILURE;
     }
 }
 
+int Repl::runCommand(const std::string &line, bool &quit)
+{
+    std::vector<std::string> splitted_line_raw = Utils::splitInArgs(std::string(line));
+
+    std::vector<std::string> splitted_line =
+        _aliasManager.replaceWithAliases(splitted_line_raw);
+
+    std::string cmd = splitted_line.at(0);
+
+    auto args = splitted_line;
+    args.erase(args.begin());
+
+    // Repl built in
+    if (cmd == "quit" || cmd == "exit") {
+        quit = true;
+        return EXIT_SUCCESS;
+    } else if (cmd == "help") {
+        return this->printHelp(args);
+        return EXIT_SUCCESS;
+    } else if (cmd == "alias") {
+        auto raw_args = splitted_line_raw;
+        raw_args.erase(raw_args.begin());
+        return this->runAliasCommand(raw_args);
+    }
+
+    // commands
+    for (auto &c : _commands) {
+        if (cmd == c->getName()) {
+            return c->run(args, *_bt);
+        }
+    }
+
+    // preset
+    if (_prm) {
+        for (auto &c : _prm->getPreset().commands) {
+            if (cmd == c.getName()) {
+                return c.runAction(*_bt);
+            }
+        }
+    }
+
+    std::cerr << "Unknown command: " << cmd << std::endl;
+    return EXIT_FAILURE;
+}
+
 int Repl::run()
 {
-    _started = true;
-
     std::cout << "Type help to list available commands" << std::endl;
     int last_exit_code = EXIT_SUCCESS;
+    bool quit = false;
+
+    _started = true;
 
     std::optional<std::string> readline;
     while ((readline = LineReader::get(last_exit_code)).has_value()) {
@@ -128,64 +175,9 @@ int Repl::run()
         if (!(line[0] != '\0')) {
             continue;
         }
-
-        std::vector<std::string> splitted_line =
-            _aliasManager.replaceWithAliases(Utils::splitInArgs(std::string(line)));
-        std::string cmd = splitted_line.at(0);
-
-        auto args = splitted_line;
-        args.erase(args.begin());
-
-        bool found = false;
-
-        // Built in
-        if (cmd == "quit" || cmd == "exit") {
+        last_exit_code = runCommand(line, quit);
+        if (quit) {
             break;
-        } else if (cmd == "help") {
-            last_exit_code = this->printHelp(args);
-            found = true;
-        } else if (cmd == "alias") {
-            last_exit_code = this->runAliasCommand(args);
-            found = true;
-        }
-
-        if (found) {
-            continue;
-        }
-
-        for (auto &c : _prm->getPreset().commands) {
-            if (cmd == c.getName()) {
-                c.runAction(*_bt);
-                found = true;
-                break;
-            }
-        }
-
-        for (auto &c : _commands) {
-            if (cmd == c->getName()) {
-                last_exit_code = c->run(args, *_bt);
-                found = true;
-                break;
-            }
-        }
-
-        if (_prm != nullptr) {
-            for (auto &c : _prm->getPreset().commands) { // TODO
-                if (cmd == c.getName()) {
-                    /* std::cout << c.payload << std::endl; */
-                    if (c.getAction() == Preset::Command::Action::WRITE) {
-                        /* Command::Write::run() */
-                    } else if (c.getAction() == Preset::Command::Action::READ) {
-                        /* Command::Read::run() */
-                    }
-                    found = true;
-                }
-            }
-        }
-
-        if (!found) {
-            std::cerr << "Unknown command: " << cmd << std::endl;
-            last_exit_code = EXIT_FAILURE;
         }
     }
     return last_exit_code;

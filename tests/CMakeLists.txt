@@ -34,6 +34,15 @@ add_executable(
   ../src/presets/PresetManager.hpp
   ../src/presets/PresetParser.cpp
   ../src/presets/PresetParser.hpp
+
+  # repl
+  src/test_repl.cpp
+  ../src/Repl/AliasManager.cpp
+  ../src/Repl/AliasManager.hpp
+  ../src/Repl/LineReader.cpp
+  ../src/Repl/LineReader.hpp
+  ../src/Repl/Repl.cpp
+  ../src/Repl/Repl.hpp
 )
 
 target_include_directories(
@@ -42,9 +51,19 @@ target_include_directories(
   ../lib/tomlplusplus/include
     )
 
+target_compile_definitions(bluerepl_test PUBLIC
+    GOOGLE_TESTS_BUILD=1
+    )
+
 # simpleBLE
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../lib/SimpleBLE ${CMAKE_BINARY_DIR}/simpleble)
 include_directories(${SIMPLEBLE_INCLUDES})
+
+# linenoise
+add_library(linenoise STATIC
+        ${CMAKE_CURRENT_LIST_DIR}/../lib/linenoise-mob/linenoise.c
+    )
+target_include_directories(linenoise PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../lib/linenoise-mob)
 
 # tabulate
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../lib/tabulate ${CMAKE_BINARY_DIR}/tabulate)
@@ -55,6 +74,7 @@ target_link_libraries(
   tabulate
   fmt
   gtest_main
+  linenoise
 )
 
 include(GoogleTest)
