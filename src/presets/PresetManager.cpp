@@ -7,7 +7,7 @@
 #include <tabulate/table.hpp>
 #include <variant>
 
-Preset::Manager::Manager()
+Preset::Manager::Manager() : _preset({})
 {
 }
 

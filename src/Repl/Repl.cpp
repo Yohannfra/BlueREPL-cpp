@@ -75,10 +75,6 @@ int Repl::loadPreset(Preset::Manager &prm)
 {
     _prm = std::make_unique<Preset::Manager>(prm);
 
-    if (_prm == nullptr) {
-        return EXIT_FAILURE;
-    }
-
     for (const auto &[k, v] : _prm->getPreset().aliases) {
         _aliasManager.add(k, v);
     }
@@ -134,7 +130,6 @@ int Repl::runCommand(const std::string &line, bool &quit)
         return EXIT_SUCCESS;
     } else if (cmd == "help") {
         return this->printHelp(args);
-        return EXIT_SUCCESS;
     } else if (cmd == "alias") {
         auto raw_args = splitted_line_raw;
         raw_args.erase(raw_args.begin());
