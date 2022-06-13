@@ -114,7 +114,7 @@ int SimpleBLEController::internal_connect()
     }
 
     std::cout << "Connected!" << std::endl;
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
 
 int SimpleBLEController::connectByIndex(std::size_t index)
