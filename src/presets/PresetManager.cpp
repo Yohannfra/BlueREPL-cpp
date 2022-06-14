@@ -15,7 +15,7 @@ int Preset::Manager::loadFromFile(const std::filesystem::path &fp)
 {
     _preset.fp = fp;
     if (_parser.parseFile(fp, _preset) == EXIT_FAILURE) {
-        std::cerr << "Failed to parse '" << fp << "'" << std::endl;
+        std::cerr << "Failed to parse " << fp << std::endl;
         return EXIT_FAILURE;
     }
     /* this->print(); */

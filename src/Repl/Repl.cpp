@@ -134,6 +134,14 @@ int Repl::runCommand(const std::string &line, bool &quit)
         auto raw_args = splitted_line_raw;
         raw_args.erase(raw_args.begin());
         return this->runAliasCommand(raw_args);
+    } else if (cmd == "preset") {
+        if (_prm) {
+            _prm->print();
+            return EXIT_SUCCESS;
+        } else {
+            std::cerr << "No preset loaded" << std::endl;
+            return EXIT_FAILURE;
+        }
     }
 
     // commands

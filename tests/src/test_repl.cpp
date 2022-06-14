@@ -77,3 +77,25 @@ TEST(test_repl, test_aliases)
     ASSERT_EQ(r.runCommand("food", quit), EXIT_SUCCESS);
     ASSERT_EQ(r.runCommand("fooe", quit), EXIT_SUCCESS);
 }
+
+TEST(test_repl, test_preset)
+{
+    Repl r;
+    bool quit;
+
+    // no preset loaded
+    ASSERT_EQ(r.runCommand("preset", quit), EXIT_FAILURE);
+
+    // loading a preset
+    Preset::Manager prm;
+    ASSERT_EQ(prm.loadFromFile("../../presets/nus.toml"), EXIT_SUCCESS);
+
+    ASSERT_EQ(r.loadPreset(prm), EXIT_SUCCESS);
+
+    // preset loaded
+    ASSERT_EQ(r.runCommand("preset", quit), EXIT_SUCCESS);
+
+    // commands in preset
+    ASSERT_EQ(r.runCommand("connect_rx", quit), EXIT_SUCCESS);
+    ASSERT_EQ(r.runCommand("send_hello", quit), EXIT_SUCCESS);
+}
