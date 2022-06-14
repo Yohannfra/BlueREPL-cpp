@@ -87,8 +87,12 @@ int Preset::Parser::parseAll(toml::table &tbl, Preset &dest)
             if (command.getAction() == Command::Action::WRITE) {
                 for (std::size_t i = 3; i < val.size(); i++) {
                     if (val[i].type() == toml::node_type::integer) {
-                        auto n = val[i].value<std::uint8_t>().value();
-                        command.addPayload(n);
+                        auto n = val[i].value<std::uint8_t>();
+                        if (!n.has_value()) {
+                            std::cerr << "Invalid integer payload in " << cmd_name<< std::endl;
+                            return EXIT_FAILURE;
+                        }
+                        command.addPayload(n.value());
                     } else if (val[i].type() == toml::node_type::floating_point) {
                         const double s = val[i].value<double>().value();
                         command.addPayload(s);
