@@ -18,6 +18,8 @@ int main(int argc, const char *argv[])
 
     if (argc > 2) {
         return printUsage(EXIT_FAILURE);
+    } else if (argc == 2 && std::string(argv[1]) == "-h") {
+        return printUsage(EXIT_SUCCESS);
     }
 
     if (argc == 2) {
