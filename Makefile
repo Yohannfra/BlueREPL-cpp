@@ -22,10 +22,10 @@ run_tests:
 			./bluerepl_test
 
 lint:
-	cppcheck --quiet --enable=warning,style,performance,portability src
+	@cppcheck --quiet --enable=warning,style,performance,portability src
 
 format:
-	clang-format -i \
+	@clang-format -i \
 			src/*/**.cpp \
 			src/*/**.hpp \
 			src/*/**.h \
