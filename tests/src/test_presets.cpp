@@ -26,7 +26,7 @@ TEST(test_presets, test_parser_nus)
 
     auto nus = pr.services.at(0);
 
-    ASSERT_EQ(nus.name, "Nordic UART Service");
+    ASSERT_EQ(nus.name, "Nordic_UART_Service");
     ASSERT_EQ(nus.uuid, "6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
 
     ASSERT_EQ(nus.characteristics.size(), 2);
@@ -45,7 +45,7 @@ TEST(test_presets, test_parser_nus)
         [](Preset::Command c) { return c.getName() == "connect_rx"; });
     ASSERT_NE(cmd_rx, pr.commands.end());
     ASSERT_EQ(cmd_rx.base()->getActionAsStr(), "notify");
-    ASSERT_EQ(cmd_rx.base()->getService(), "Nordic UART Service");
+    ASSERT_EQ(cmd_rx.base()->getService(), "Nordic_UART_Service");
     ASSERT_EQ(cmd_rx.base()->getCharacteristic(), "rx");
 
     // send_hello
@@ -53,9 +53,9 @@ TEST(test_presets, test_parser_nus)
         [](Preset::Command c) { return c.getName() == "send_hello"; });
     ASSERT_NE(cmd_hello, pr.commands.end());
     ASSERT_EQ(cmd_hello.base()->getActionAsStr(), "write");
-    ASSERT_EQ(cmd_hello.base()->getService(), "Nordic UART Service");
+    ASSERT_EQ(cmd_hello.base()->getService(), "Nordic_UART_Service");
     ASSERT_EQ(cmd_hello.base()->getCharacteristic(), "tx");
-    ASSERT_EQ(cmd_hello.base()->getPayloadAsStr(), "Hello\r\n");
+    ASSERT_EQ(cmd_hello.base()->getPayloadAsStr(), "'Hello\r\n'");
 }
 
 TEST(test_presets, test_parser_battery)

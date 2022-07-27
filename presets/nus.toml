@@ -3,7 +3,7 @@ DEVICE_NAME = "my_device"
 DEVICE_ADDRESS = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 
 [[services.nus]]
-NAME = "Nordic UART Service"
+NAME = "Nordic_UART_Service"
 UUID = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 
 [[services.nus.characteristics.tx]]
@@ -15,5 +15,5 @@ NAME = "rx"
 UUID = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 
 [[commands]]
-connect_rx = ["notify", "Nordic UART Service", "rx"]
-send_hello = ["write", "Nordic UART Service", "tx", "Hello\r\n"]
+connect_rx = ["notify", "Nordic_UART_Service", "rx"]
+send_hello = ["write", "Nordic_UART_Service", "tx", "'Hello\r\n'"]
