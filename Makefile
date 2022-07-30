@@ -8,10 +8,13 @@ compile: gen
 gen: build
 	@cmake -S . -B build
 
+build:
+	mkdir build
+
 clean:
 	@$(RM) -r build/
 
-re: clean gen build
+re: clean gen compile
 
 run_tests:
 	cmake -S . -B build
