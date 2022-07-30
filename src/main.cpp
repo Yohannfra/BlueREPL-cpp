@@ -4,6 +4,7 @@
 #include "utils.hpp"
 
 #include <iostream>
+#include <functional>
 #include <string>
 
 static int printUsage(int ret_code)

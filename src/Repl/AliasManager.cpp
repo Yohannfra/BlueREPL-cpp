@@ -1,6 +1,7 @@
 #include "AliasManager.hpp"
 
 #include "utils.hpp"
+#include <algorithm>
 
 #include <iostream>
 
