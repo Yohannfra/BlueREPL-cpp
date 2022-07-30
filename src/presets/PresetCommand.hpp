@@ -2,6 +2,7 @@
 #define PRESETCOMMAND_HPP
 
 #include "BleController.hpp"
+#include "commands/ICommand.hpp"
 
 #include <iostream>
 #include <string>
@@ -39,8 +40,9 @@ namespace Preset {
         void addPayload(const PayloadVariant payload);
         void addPayload(std::uint8_t payload);
         void addPayload(const std::string &payload);
+        bool hasPayload() const;
 
-        int runAction(BleController &bt);
+        int runAction(BleController &bt, std::vector<::Command::ICommand *> commands);
 
         void setAction(Action a);
         int setAction(const std::string &actionStr);

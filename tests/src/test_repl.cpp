@@ -1,3 +1,4 @@
+#include "Controllers/Mock/MockController.hpp"
 #include "Repl/Repl.hpp"
 
 #include <algorithm>
@@ -83,12 +84,18 @@ TEST(test_repl, test_preset)
     Repl r;
     bool quit;
 
+    BleController *bt = new MockController();
+    r.setBleController(bt);
+
     // no preset loaded
     ASSERT_EQ(r.runCommand("preset", quit), EXIT_FAILURE);
 
     // loading a preset
     Preset::Manager prm;
     ASSERT_EQ(prm.loadFromFile("../../presets/nus.toml"), EXIT_SUCCESS);
+
+    ASSERT_EQ(r.runCommand("connect_rx", quit), EXIT_FAILURE);
+    ASSERT_EQ(r.runCommand("send_hello", quit), EXIT_FAILURE);
 
     ASSERT_EQ(r.loadPreset(prm), EXIT_SUCCESS);
 

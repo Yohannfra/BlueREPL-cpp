@@ -57,8 +57,12 @@ namespace Command {
             BluetoothUUID service = values.at(0);
             BluetoothUUID characteristic = values.at(1);
             std::string vals = bt.read(service, characteristic);
-            Utils::printBleValue(vals, type);
 
+            if (vals.empty()) {
+                return EXIT_FAILURE;
+            }
+
+            Utils::printBleValue(vals, type);
             return EXIT_SUCCESS;
         }
     };

@@ -60,8 +60,7 @@ namespace Command {
             BluetoothUUID characteristic = values.at(1);
             return bt.notify(service, characteristic, //
                 [service, characteristic, cb](ByteArray bytes) {
-                    std::cout << "Notification from " << service << " " << characteristic
-                              << " :";
+                    std::cout << service << " " << characteristic << " :";
                     cb(bytes);
                 } //
             );

@@ -1,6 +1,7 @@
 #include "Controllers/SimpleBLE/SimpleBleController.hpp"
 #include "Repl/Repl.hpp"
 #include "presets/PresetManager.hpp"
+#include "utils.hpp"
 
 #include <iostream>
 #include <string>

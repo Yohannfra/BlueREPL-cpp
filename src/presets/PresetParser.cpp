@@ -89,7 +89,8 @@ int Preset::Parser::parseAll(toml::table &tbl, Preset &dest)
                     if (val[i].type() == toml::node_type::integer) {
                         auto n = val[i].value<std::uint8_t>();
                         if (!n.has_value()) {
-                            std::cerr << "Invalid integer payload in " << cmd_name<< std::endl;
+                            std::cerr << "Invalid integer payload in " << cmd_name
+                                      << std::endl;
                             return EXIT_FAILURE;
                         }
                         command.addPayload(n.value());

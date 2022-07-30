@@ -28,7 +28,7 @@ private:
     int runAliasCommand(const std::vector<std::string> &args);
     int runCommand(const std::string &line, bool &quit);
 
-    BleController *_bt;
+    BleController *_bt = nullptr;
     AliasManager _aliasManager;
     LineReader _reader;
     std::vector<Command::ICommand *> _commands;

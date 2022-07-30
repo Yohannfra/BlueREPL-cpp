@@ -155,7 +155,7 @@ int Repl::runCommand(const std::string &line, bool &quit)
     if (_prm) {
         for (auto &c : _prm->getPreset().commands) {
             if (cmd == c.getName()) {
-                return c.runAction(*_bt);
+                return c.runAction(*_bt, _commands);
             }
         }
     }

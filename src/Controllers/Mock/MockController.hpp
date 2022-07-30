@@ -1,13 +1,12 @@
-#ifndef SIMPLE_BLE_CONTROLLER_HPP
-#define SIMPLE_BLE_CONTROLLER_HPP
+#ifndef MOCKCONTROLLER_HPP
+#define MOCKCONTROLLER_HPP
 
 #include "BleController.hpp"
-#include "simpleble/SimpleBLE.h"
 
-class SimpleBLEController : public BleController {
+class MockController : public BleController {
 public:
-    SimpleBLEController();
-    ~SimpleBLEController();
+    MockController();
+    ~MockController();
 
     int scan(std::uint32_t scan_time_second = 5, bool print_results = true) final;
 
@@ -36,13 +35,6 @@ public:
         BluetoothUUID const &service, BluetoothUUID const &characteristic) final;
 
 private:
-    void selectAdapter();
-    std::string byte_array_to_string(const SimpleBLE::ByteArray &bytes) const;
-    int internal_connect();
-
-    SimpleBLE::Adapter _adapter;
-    std::vector<SimpleBLE::Peripheral> _scannedPeripherals;
-    SimpleBLE::Peripheral _peripheral;
 };
 
 #endif

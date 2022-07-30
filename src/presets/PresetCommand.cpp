@@ -1,5 +1,10 @@
 #include "PresetCommand.hpp"
 
+#include "commands/indicate.hpp"
+#include "commands/notify.hpp"
+#include "commands/read.hpp"
+#include "commands/write.hpp"
+
 #include <iostream>
 
 Preset::Command::Command()
@@ -19,14 +24,30 @@ Preset::Command::Command(const Command &c) :
 {
 }
 
-int Preset::Command::runAction(BleController &bt)
+int Preset::Command::runAction(
+    BleController &bt, std::vector<::Command::ICommand *> commands)
 {
-    std::cout << "Running command:" << std::endl;
-    std::cout << this->getActionAsStr() + " " + _service + " " + _characteristic + " " +
+    std::cout << "Running command: "
+              << this->getActionAsStr() + " " + _service + " " + _characteristic + " " +
             this->getPayloadAsStr()
               << std::endl;
-    // TODO run command
-    return EXIT_SUCCESS;
+
+    std::vector<std::string> args{
+        _service,
+        _characteristic,
+    };
+
+    if (this->hasPayload()) {
+        args.push_back(this->getPayloadAsStr());
+    }
+
+    for (auto &c : commands) {
+        if (c->getName() == this->getActionAsStr()) {
+            return c->run(args, bt);
+        }
+    }
+
+    return EXIT_FAILURE;
 }
 
 void Preset::Command::setPayload(const std::vector<PayloadVariant> &payload)
@@ -49,6 +70,11 @@ void Preset::Command::addPayload(const std::string &payload)
 {
     PayloadVariant v = payload;
     _payload.push_back(v);
+}
+
+bool Preset::Command::hasPayload() const
+{
+    return !_payload.empty();
 }
 
 void Preset::Command::setAction(Action a)
@@ -142,7 +168,6 @@ const std::string Preset::Command::getPayloadAsStr() const
             out += s;
         }
     }
-
     return out;
 }
 

@@ -52,8 +52,7 @@ void SimpleBLEController::selectAdapter()
     }
 }
 
-std::string SimpleBLEController::byte_array_to_string(
-    const SimpleBLE::ByteArray &bytes) const
+std::string SimpleBLEController::byte_array_to_string(const ByteArray &bytes) const
 {
     std::ostringstream oss;
     for (auto byte : bytes) {
@@ -73,8 +72,7 @@ void SimpleBLEController::printScannedPeripheral()
 
         std::cout << "[" << index << "] " << peripheral_string << " "
                   << connectable_string << "\n";
-        std::map<uint16_t, SimpleBLE::ByteArray> manufacturer_data =
-            per.manufacturer_data();
+        std::map<uint16_t, ByteArray> manufacturer_data = per.manufacturer_data();
         for (const auto &[manufacturer_id, data] : manufacturer_data) {
             std::cout << "\tManufacturer ID:\t" << manufacturer_id << "\n";
             std::cout << "\tManufacturer data:\t" << byte_array_to_string(data) << "\n"
@@ -225,10 +223,10 @@ int SimpleBLEController::print_peripheral_infos()
     return EXIT_SUCCESS;
 }
 
-SimpleBLE::ByteArray SimpleBLEController::read(
+ByteArray SimpleBLEController::read(
     std::string const &service, std::string const &characteristic)
 {
-    SimpleBLE::ByteArray read_bytes;
+    ByteArray read_bytes;
 
     if (!this->isConnected()) {
         std::cerr << "No device connected" << std::endl;

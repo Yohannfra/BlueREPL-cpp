@@ -43,6 +43,10 @@ add_executable(
   ../src/Repl/LineReader.hpp
   ../src/Repl/Repl.cpp
   ../src/Repl/Repl.hpp
+
+  # ble controller
+  ../src/Controllers/Mock/MockController.cpp
+  ../src/Controllers/Mock/MockController.hpp
 )
 
 target_include_directories(
