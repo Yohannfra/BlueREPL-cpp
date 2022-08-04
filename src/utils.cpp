@@ -240,7 +240,7 @@ std::map<std::string, BleDataType> Utils::tokenizeLine(const std::string &line)
         } else if (Utils::isDecimalNumber(w)) {
             mp[w] = BleDataType::DECIMAL;
         } else {
-            std::cerr << "Invalid argument: '" << w << "'" << std::endl;
+            std::cerr << "Unknown argument type: '" << w << "'" << std::endl;
             return {};
         }
     }

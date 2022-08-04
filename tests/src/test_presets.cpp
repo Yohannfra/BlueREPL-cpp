@@ -55,7 +55,7 @@ TEST(test_presets, test_parser_nus)
     ASSERT_EQ(cmd_hello.base()->getActionAsStr(), "write");
     ASSERT_EQ(cmd_hello.base()->getService(), "Nordic_UART_Service");
     ASSERT_EQ(cmd_hello.base()->getCharacteristic(), "tx");
-    ASSERT_EQ(cmd_hello.base()->getPayloadAsStr(), "'Hello\r\n'");
+    ASSERT_EQ(cmd_hello.base()->getPayloadAsStr(), "'Hello'");
 }
 
 TEST(test_presets, test_parser_battery)
