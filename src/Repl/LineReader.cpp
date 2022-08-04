@@ -2,15 +2,32 @@
 
 #include "utils.hpp"
 
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+
 extern "C" {
 #include "linenoise.h"
 }
 
-static constexpr const char *HISTORY_FILE_PATH = ".blrepl_history.txt";
+std::string LineReader::getHistoryFilePath() const
+{
+    std::string homedir;
+
+
+    char *tmp = getenv("HOME");
+    if (tmp == NULL) {
+        homedir = getpwuid(getuid())->pw_dir;
+    } else {
+        homedir = tmp;
+    }
+
+    return homedir +  "/.blrepl_history.txt";
+}
 
 LineReader::LineReader()
 {
-    linenoiseHistoryLoad(HISTORY_FILE_PATH);
+    linenoiseHistoryLoad(this->getHistoryFilePath().c_str());
     linenoiseSetMultiLine(1);
 }
 
@@ -31,5 +48,5 @@ std::optional<std::string> LineReader::get(int last_exit_code)
 void LineReader::addInHistory(const std::string &s)
 {
     linenoiseHistoryAdd(s.c_str());
-    linenoiseHistorySave(HISTORY_FILE_PATH);
+    linenoiseHistorySave(this->getHistoryFilePath().c_str());
 }

@@ -178,6 +178,7 @@ int Repl::run()
         if (!(line[0] != '\0')) {
             continue;
         }
+        _reader.addInHistory(line);
         last_exit_code = runCommand(line, quit);
         if (quit) {
             break;
